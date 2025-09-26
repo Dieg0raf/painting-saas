@@ -17,7 +17,6 @@ from flask_jwt_extended import (
     JWTManager
 )
 
-
 # Database
 from database import db
 from models import User, Company, Role
@@ -95,6 +94,7 @@ def create_user():
 @app.route("/api/users", methods=['GET'])
 @jwt_required()
 # TODO: create decorator @roles_required("admin")
+# TODO: Add pydantic for validation
 def get_users():
     users = User.query.all()
     users_list = []

@@ -1,5 +1,6 @@
 import os
 from dotenv import load_dotenv
+from datetime import timedelta
 
 class Config:
     SQLALCHEMY_TRACK_MODIFICATIONS = False
@@ -7,6 +8,10 @@ class Config:
     # TODO: FIX Rate limiting to mee this apps requirements
     DEFAULT_RATE_LIMIT = os.getenv('DEFAULT_RATE_LIMIT', '100 per day')
     QUOTE_RATE_LIMIT = os.getenv('QUOTE_RATE_LIMIT', '100/day;5/hour;2/minute')
+
+    # JWT Security
+    JWT_ACCESS_TOKEN_EXPIRES = timedelta(hours=1)  
+    JWT_REFRESH_TOKEN_EXPIRES = timedelta(days=7)
     
     # API Security
     API_KEY = os.getenv('API_KEY')
@@ -21,6 +26,10 @@ class DevelopmentConfig(Config):
     TESTING = True
     SQLALCHEMY_DATABASE_URI = os.getenv('DATABASE_URL', 'sqlite:///quotes.db')
     CORS_ORIGINS = ["localhost:3000", "127.0.0.1:3000"]
+
+    # JWT
+    JWT_SECRET_KEY = os.getenv('JWT_SECRET_KEY','your-super-secret-key')
+    JWT_ACCESS_TOKEN_EXPIRES = timedelta(seconds=30)  
     
     def __init__(self):
         print('Development environment')
@@ -35,6 +44,9 @@ class ProductionConfig(Config):
         os.getenv("NEXT_JS_APP_HOST"),
         os.getenv("NEXT_JS_APP_HOST_v2")
     ]
+
+    # JWT
+    JWT_SECRET_KEY = os.getenv('JWT_SECRET_KEY','your-super-secret-key')
     
     def __init__(self):
         print('Production environment')
@@ -47,5 +59,4 @@ config = {
 
 def get_config():
     env = os.getenv('FLASK_ENV', 'development')
-    print(env)
     return config.get(env, config['default'])

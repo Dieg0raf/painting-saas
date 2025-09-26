@@ -475,3 +475,5 @@ instance/
 # Alembic migrations
 alembic/versions/*.py
 !alembic/versions/.gitkeep
+
+tests/

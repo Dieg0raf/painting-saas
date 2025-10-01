@@ -1,5 +1,5 @@
 # utils
-from utils import logger
+from utils import logger, required_roles
 
 # config
 from config import get_config
@@ -16,8 +16,6 @@ from flask_jwt_extended import (
     jwt_required,
     JWTManager
 )
-
-from utils.decorators import required_roles
 
 # Database
 from database import db

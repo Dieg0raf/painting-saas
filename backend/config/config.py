@@ -29,7 +29,6 @@ class DevelopmentConfig(Config):
 
     # JWT
     JWT_SECRET_KEY = os.getenv('JWT_SECRET_KEY','your-super-secret-key')
-    JWT_ACCESS_TOKEN_EXPIRES = timedelta(seconds=30)  
     
     def __init__(self):
         print('Development environment')

@@ -13,9 +13,12 @@ from flask_jwt_extended import (
     create_access_token, 
     create_refresh_token,
     get_jwt_identity, 
+    get_jwt,
     jwt_required,
     JWTManager
 )
+
+from utils.decorators import required_roles
 
 # Database
 from database import db
@@ -93,6 +96,7 @@ def create_user():
     
 @app.route("/api/users", methods=['GET'])
 @jwt_required()
+@required_roles([])
 # TODO: create decorator @roles_required("admin")
 # TODO: Add pydantic for validation
 def get_users():
@@ -156,10 +160,15 @@ def api_login():
             logger.warning(f"No data sent")
             return jsonify({"error": "No data sent"}), 400
 
-        user = User.query.filter_by(email=data.get("email", None)).first()
-        if user and user.check_password(data.get("password", None)):
-            # TODO: figure out if user.id is the best
-            access_token = create_access_token(identity=str(user.id))
+        email = data.get("email", None)
+        password = data.get("password", None)
+        user = User.query.filter_by(email=email).first()
+
+        if user and user.check_password(password):
+            additional_claims = {"roles": [r.name for r in user.roles]}
+
+            # create tokens
+            access_token = create_access_token(identity=str(user.id), additional_claims=additional_claims)
             refresh_token = create_refresh_token(identity=str(user.id))
 
             logger.info({f"Successfully logged in"})
@@ -183,7 +192,16 @@ def api_login():
 def api_refresh_token():
     try:
         user_id = get_jwt_identity()
-        new_access_token = create_access_token(identity=user_id)
+        user = User.query.filter_by(id=user_id).first()
+
+        if not user:
+            logger.error(f"Token could not be refreshed: {str(e)}")
+            return jsonify({"error": "Failed to refresh token"}), 401
+
+        # create new token
+        additional_claims = {"roles": [r.name for r in user.roles]}
+        new_access_token = create_access_token(identity=user_id, additional_claims=additional_claims)
+
         logger.info(f"Access token was refreshed successfully")
         return jsonify({"access_token": new_access_token}), 200
     except Exception as e:

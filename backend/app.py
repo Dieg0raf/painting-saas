@@ -12,7 +12,8 @@ from flask_cors import CORS
 from flask_jwt_extended import (
     create_access_token, 
     create_refresh_token,
-    get_jwt_identity, 
+    get_jwt_identity,
+    get_jwt,
     jwt_required,
     JWTManager
 )
@@ -156,6 +157,7 @@ def api_login():
             logger.warning(f"No data sent")
             return jsonify({"error": "No data sent"}), 400
 
+        # extract request info
         email = data.get("email", None)
         password = data.get("password", None)
         user = User.query.filter_by(email=email).first()
@@ -203,10 +205,47 @@ def api_refresh_token():
     except Exception as e:
         logger.error(f"Token could not be refreshed: {str(e)}")
         return jsonify({"error": "Failed to refresh token"}), 401
+    
+@app.route("/api/auth/me")
+@jwt_required()
+def api_me():
+    # TODO: verify if this is the best way to verify the user is logged in
+    try:
+        user_id = get_jwt_identity()
+        current_user_claims = get_jwt()
+        user_roles = current_user_claims.get("roles")
+
+        if not user_id or not user_roles:
+            logger.error(f"User not found")
+            return jsonify({"error": "User not found"}), 404
+
+        user = User.query.filter_by(id=user_id).first()
+        if not user:
+            logger.error(f"User not found")
+            return jsonify({"error": "User not found"}), 404
+        
+        # check if user has all required roles
+        for r in user.roles:
+            if not r.name in user_roles:
+                logger.error(f"User does not have all required roles")
+                return jsonify({"error": "User does not have all required roles"}), 404
+
+        user_info = {
+            'user_id': user.id,
+            'username': user.username,
+            'role': user.roles[0].name if user.roles else 'user'
+        }
+
+        logger.info(f"User found: {user_info}")
+        return jsonify({"user": user_info}), 200
+    except Exception as e:
+        logger.error(f"Error getting user: {str(e)}")
+        return jsonify({"error": "Failed to get user"}), 500
+
 
 @app.route("/admin")
 @jwt_required()
-# @roles_required("admin")
+@required_roles(["admin"])
 def admin_panel():
     return "Manager panel"
 

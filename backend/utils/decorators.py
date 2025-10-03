@@ -9,14 +9,14 @@ from .logger import logger
 
 def required_roles(required_roles=None):
     def decorator(func):
-        @wraps(func) # This preserves the metadata of the function
+        @wraps(func)
         def wrapper(*args, **kwargs):
             try:
-                print(required_roles)
                 if not required_roles:
                     logger.error({"error": "required_roles was not passed in!"})
                     return jsonify({"error": "Internal Server Error"}), 500
 
+                # get user jwt info
                 user_id = get_jwt_identity()
                 current_user_claims = get_jwt()
                 user_roles = current_user_claims.get("roles")

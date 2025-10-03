@@ -1,10 +1,9 @@
-import Todos from "./components/Todos";
-
+import Dashboard from "./components/Dashboard/Dashboard";
 export default function Home() {
   return (
     <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
       <h1>Rivas Pro Painting Dashboard</h1>
-      <Todos />
+      <Dashboard />
     </div>
   );
 }

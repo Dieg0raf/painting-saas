@@ -29,10 +29,6 @@ A full-stack SaaS platform designed to streamline job estimation and client mana
 - **Tailwind CSS** - Utility-first styling
 - **TypeScript** - Type-safe development
 
-## 📱 Screenshots
-
-*[Add screenshots of your dashboard, estimate creation, and mobile views]*
-
 ## 🚀 Getting Started
 
 ### Prerequisites

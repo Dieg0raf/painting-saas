@@ -1,28 +1,74 @@
-# Painting Company SaaS App
+# ContractorHub
 
-A small full-stack web application designed to help painting companies generate and manage job estimates.  
-Currently built for a single company use case, with future potential to support multiple companies.
+A full-stack SaaS platform designed to streamline job estimation and client management for construction companies. Built with modern web technologies to provide an intuitive, mobile-responsive experience for contractors and field workers.
 
----
+## 🚀 Features
 
-## Features
-- User authentication (JWT-based)
-- Dashboard for managing estimates
-- Generate and export estimates as PDF
-- Simple, clean UI for non-technical users
+### Core Functionality
+- **Job Estimation Management** - Create, edit, and track project estimates
+- **Client Relationship Management** - Maintain customer database and communication history
+- **PDF Generation** - Export professional estimates and invoices
+- **Mobile-Responsive Design** - Access from any device in the field
 
----
+### Technical Features
+- **Secure Authentication** - JWT-based user authentication
+- **Real-time Updates** - Live data synchronization across devices
+- **Data Export** - PDF generation for estimates and reports
+- **Responsive UI** - Optimized for desktop, tablet, and mobile
 
-## Tech Stack
-- **Backend**: Flask (Python), SQLite (for now)
-- **Frontend**: Next.js (React, TailwindCSS)
-- **Auth**: JWT
-- **Export**: PDF generation library (Python)
+## 🛠️ Tech Stack
 
----
+### Backend
+- **Flask** - Python web framework
+- **PostgreSQL** - Production-ready database
+- **JWT** - Secure authentication
+- **Python** - PDF generation and business logic
 
-## Getting Started
+### Frontend
+- **Next.js** - React framework with SSR
+- **Tailwind CSS** - Utility-first styling
+- **TypeScript** - Type-safe development
+
+## 📱 Screenshots
+
+*[Add screenshots of your dashboard, estimate creation, and mobile views]*
+
+## 🚀 Getting Started
 
 ### Prerequisites
 - Python 3.10+
 - Node.js 18+
+- PostgreSQL 13+
+
+### Installation
+
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/Dieg0raf/contractor-hub
+   cd contractor-hub
+   ```
+
+2. **Backend Setup**
+   ```bash
+   cd backend
+   python -m venv venv
+   source venv/bin/activate  # On Windows: venv\Scripts\activate
+   pip install -r requirements.txt
+   python app.py
+   ```
+
+3. **Frontend Setup**
+   ```bash
+   cd frontend
+   npm install
+   npm run dev
+   ```
+
+4. **Database Setup**
+   ```bash
+   # Create PostgreSQL database
+   createdb contractor_hub
+   python setup_database.py
+   ```
+
+## 🏗️ Architecture

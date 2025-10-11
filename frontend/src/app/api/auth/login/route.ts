@@ -1,10 +1,10 @@
 import type { NextRequest } from 'next/server'
 import { NextResponse } from 'next/server'
-import { LoginInfo, User } from '@/app/types/auth'
+import { AuthResponse, LoginCredentials } from '@/app/types/auth'
 
 export async function POST(request: NextRequest) {
     console.log("\n---- api/auth/login/route.ts ----");
-    const { email, password }: User = await request.json()
+    const { email, password }: LoginCredentials = await request.json()
 
     const res = await fetch(' http://127.0.0.1:5000/api/login', {
         method: 'POST',
@@ -13,8 +13,8 @@ export async function POST(request: NextRequest) {
     })
 
     if (res.ok) {
-        // parse response JSON into a LoginInfo object
-        const data: LoginInfo = await res.json()
+        // parse response JSON into a AuthResponse object
+        const data: AuthResponse = await res.json()
 
         // Set cookies in Next.js response
         const nextResponse = NextResponse.json({

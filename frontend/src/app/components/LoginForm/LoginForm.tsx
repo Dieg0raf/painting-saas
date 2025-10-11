@@ -1,7 +1,10 @@
 "use client";
+import { useUser } from "@/app/hooks/useUser";
 import { useState } from "react";
 
 export default function LoginForm() {
+  const { login } = useUser();
+
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const handleLogin = async () => {
     // Calls our Next.js API route
@@ -15,8 +18,11 @@ export default function LoginForm() {
     });
 
     const data = await res.json();
+    console.log("loginForm data: ", data);
     if (res.status === 200) {
       setIsLoggedIn(true);
+      console.log("data.user: ", data);
+      login(data.user);
       if (data.redirect) {
         window.location.href = data.redirect;
       }

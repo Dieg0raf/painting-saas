@@ -1,24 +1,39 @@
 "use client";
+import { useUser } from "@/app/hooks/useUser";
 
 export default function Nav() {
+  const { user, logout } = useUser();
+
   const handleLogout = async () => {
     const res = await fetch("/api/auth/logout", {
       method: "POST",
     });
-    const { redirect, success } = await res.json();
-    if (success === true) {
-      window.location.href = redirect;
+    const data = await res.json();
+    if (data.success) {
+      logout();
+      window.location.href = "/login";
     }
   };
 
   return (
     <div>
-      <button
-        onClick={handleLogout}
-        className="bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600 cursor-pointer"
-      >
-        Logout
-      </button>
+      {user ? (
+        <div>Logged in as {user.username}</div>
+      ) : (
+        <div>Not logged in</div>
+      )}
+
+      {user ? (
+        <button onClick={handleLogout}>Logout</button>
+      ) : (
+        <button
+          onClick={() => {
+            window.location.href = "/login";
+          }}
+        >
+          Login
+        </button>
+      )}
     </div>
   );
 }

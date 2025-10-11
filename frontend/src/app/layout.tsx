@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import Providers from "./providers";
+import Providers from "./providers/providers";
 import Nav from "./components/Nav/Nav";
 
 const geistSans = Geist({
@@ -38,6 +38,9 @@ export default function RootLayout({
           {/* TODO: Fix Nav component so it's knows when to display logout and login buttons */}
           {/* TODO: Fix useAuth hook so it's knows when to display the user's name and logout button */}
           {/* TODO: CompanyList component was just used for testing - remove it */}
+
+          {/* Summary (10/10/25) */}
+          {/* TODO: Create useContext hook to store the user's data when they sign in */}
           <Nav />
           {children}
         </Providers>

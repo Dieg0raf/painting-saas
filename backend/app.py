@@ -174,15 +174,16 @@ def api_login():
             access_token = create_access_token(identity=str(user.id), additional_claims=additional_claims)
             refresh_token = create_refresh_token(identity=str(user.id))
 
-            logger.info({f"Successfully logged in"})
             company = Company.query.filter_by(id=user.company_id).first()
+
+            logger.info({f"Successfully logged in"})
             return jsonify({
                 'access_token': access_token,
                 'refresh_token': refresh_token,
                 'user': {
                     'id': user.id,
                     'username': user.username,
-                    'email': user.email,
+                    'email': email,
                     'roles': [r.name for r in user.roles],
                     'company': {
                         'id': company.id,

@@ -30,17 +30,6 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <Providers>
-          {/* Summary (10/3/25) */}
-          {/* Simple authentication is set up and working */}
-          {/* route.ts is set up for under /api/auth/* (used for login, logout, me, etc.) */}
-          {/* middleware.ts is set up for all requests (used for authentication - checks if user is logged in) */}
-
-          {/* TODO: Fix Nav component so it's knows when to display logout and login buttons */}
-          {/* TODO: Fix useAuth hook so it's knows when to display the user's name and logout button */}
-          {/* TODO: CompanyList component was just used for testing - remove it */}
-
-          {/* Summary (10/10/25) */}
-          {/* TODO: Create useContext hook to store the user's data when they sign in */}
           <Nav />
           {children}
         </Providers>

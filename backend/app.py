@@ -175,6 +175,9 @@ def api_login():
                 'refresh_token': refresh_token,
                 'user_id': user.id,
                 'username': user.username,
+                # TODO: add more info here 
+                # more 'user' info here
+                # company { ... }
                 'role': user.roles[0].name if user.roles else 'user'
             })
 

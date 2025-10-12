@@ -1,9 +1,16 @@
-import Dashboard from "./components/Dashboard/Dashboard";
-export default function Home() {
+import CompanyList from "./components/Dashboard/ComanyList";
+import { DashboardLayout } from "./components/DashboardLayout/DashboardLayout";
+
+export default function Dashboard() {
   return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <h1>Rivas Pro Painting Dashboard</h1>
-      <Dashboard />
-    </div>
+    <DashboardLayout>
+      <div className="space-y-6">
+        <h1 className="text-3xl font-bold">Dashboard</h1>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {/* Your dashboard content */}
+          <CompanyList />
+        </div>
+      </div>
+    </DashboardLayout>
   );
 }

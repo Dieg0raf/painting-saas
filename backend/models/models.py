@@ -3,6 +3,9 @@ from datetime import datetime
 from argon2 import PasswordHasher
 import enum
 
+
+# TODO: Create a model for the Invoices table
+
 class WorkType(enum.Enum):
     EXTERIOR = 'exterior'
     INTERIOR = 'interior'
@@ -42,7 +45,6 @@ class Estimate(db.Model):
     # Foreign keys (stored in the database)
     customer_id = db.Column(db.Integer, db.ForeignKey('customer.id'), nullable=False)
     company_id = db.Column(db.Integer, db.ForeignKey('company.id'), nullable=False)
-    description_id = db.Column(db.Integer, db.ForeignKey('estimate_description.id'), nullable=False)
     created_by_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)  # Add this
 
     # Relationships (Python-level convenience, only exists in python, not in the database)
@@ -62,7 +64,9 @@ class EstimateDescription(db.Model):
     title = db.Column(db.String(120), nullable=False, default='')
 
     # Work types for the description (e.g., ['exterior'], ['interior'], or ['exterior', 'interior'])
-    work_types = db.Column(db.ARRAY(db.Enum(WorkType)), nullable=False, default=[])
+    # TODO: Update to array when changing to Postgres, SQLite does not support ARRAY type
+    # work_types = db.Column(db.ARRAY(db.Enum(WorkType)), nullable=False, default=[])
+    work_types = db.Column(db.JSON, nullable=False, default=list)
 
     # Individual items for the description
     items = db.relationship('EstimateItem', backref='estimate_description', lazy=True, cascade='all, delete-orphan')
@@ -95,6 +99,8 @@ class Customer(db.Model):
     email = db.Column(db.String(120), unique=True, nullable=False)
     logo = db.Column(db.String(120), nullable=False)
 
+    # TODO: Add LLC field
+
     # Customer address info
     address = db.Column(db.String(120), nullable=False)
     city = db.Column(db.String(120), nullable=False)
@@ -109,25 +115,20 @@ class Customer(db.Model):
         return f"<Customer {self.name}>"
 
     
-# TODO: Create a model for the Invoices table
-
-# ! Company, User, and Role models are already defined and used in the app.py file
-# ! Others were just made
 class Company(db.Model):
     id = db.Column(db.Integer, primary_key=True)
+    users = db.relationship("User", backref='company', lazy=True)
+
+    # Company address info
     name = db.Column(db.String(80), nullable=False)
     phone_number = db.Column(db.String(15), nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
     logo = db.Column(db.String(120), nullable=False)
-
-    users = db.relationship("User", backref='company', lazy=True)
-
-    # TODO: Add address info
-    # address = db.Column(db.String(120), nullable=False)
-    # city = db.Column(db.String(120), nullable=False)
-    # state = db.Column(db.String(120), nullable=False)
-    # zip_code = db.Column(db.String(120), nullable=False)
-    # country = db.Column(db.String(120), nullable=False)
+    address = db.Column(db.String(120), nullable=False)
+    city = db.Column(db.String(120), nullable=False)
+    state = db.Column(db.String(120), nullable=False)
+    zip_code = db.Column(db.String(120), nullable=False)
+    country = db.Column(db.String(120), nullable=False)
 
     created_at = db.Column(db.DateTime, nullable=False, default=datetime.now)
     updated_at = db.Column(db.DateTime, nullable=False, default=datetime.now)

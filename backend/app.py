@@ -93,8 +93,8 @@ def create_user():
         return jsonify({"error": "Failed to create user"}), 500
     
 @app.route("/api/users", methods=['GET'])
-@jwt_required()
-@required_roles(['admin'])
+# @jwt_required()
+# @required_roles(['admin'])
 # TODO: Add pydantic for validation
 def get_users():
     users = User.query.all()
@@ -133,6 +133,11 @@ def create_company():
             phone_number=data.get("phone_number"),
             email=data.get("email"),
             logo=data.get("logo"),
+            address=data.get("address"),
+            city=data.get("city"),
+            state=data.get("state"),
+            zip_code=data.get("zip_code"),
+            country=data.get("country"),
         )
         db.session.add(company)
         db.session.commit()
@@ -170,15 +175,28 @@ def api_login():
             refresh_token = create_refresh_token(identity=str(user.id))
 
             logger.info({f"Successfully logged in"})
+            company = Company.query.filter_by(id=user.company_id).first()
             return jsonify({
                 'access_token': access_token,
                 'refresh_token': refresh_token,
-                'user_id': user.id,
-                'username': user.username,
-                # TODO: add more info here 
-                # more 'user' info here
-                # company { ... }
-                'role': user.roles[0].name if user.roles else 'user'
+                'user': {
+                    'id': user.id,
+                    'username': user.username,
+                    'email': user.email,
+                    'roles': [r.name for r in user.roles],
+                    'company': {
+                        'id': company.id,
+                        'name': company.name,
+                        'phone_number': company.phone_number,
+                        'email': company.email,
+                        'logo': company.logo,
+                        'address': company.address,
+                        'city': company.city,
+                        'state': company.state,
+                        'zip_code': company.zip_code,
+                        'country': company.country,
+                    },
+                },
             })
 
         logger.warning(f"Invalid credentials")

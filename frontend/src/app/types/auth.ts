@@ -2,6 +2,7 @@ export type UserProfile = {
     id: string
     username: string
     role: string
+    email?: string
 }
 
 export type LoginCredentials = {

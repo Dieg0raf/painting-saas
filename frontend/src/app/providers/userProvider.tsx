@@ -23,9 +23,7 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
   // remove user from local storage
   const logout = () => {
     setUser(null);
-    console.log("removing user...");
     localStorage.removeItem("user");
-    console.log("removed user...");
   };
 
   return (

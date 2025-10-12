@@ -1,9 +1,11 @@
 "use client";
 import { useUser } from "@/app/hooks/useUser";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 export default function LoginForm() {
   const { login } = useUser();
+  const router = useRouter();
 
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const handleLogin = async () => {
@@ -21,10 +23,9 @@ export default function LoginForm() {
     console.log("loginForm data: ", data);
     if (res.status === 200) {
       setIsLoggedIn(true);
-      console.log("data.user: ", data);
       login(data.user);
       if (data.redirect) {
-        window.location.href = data.redirect;
+        router.push(data.redirect);
       }
       return;
     }

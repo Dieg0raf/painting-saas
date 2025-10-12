@@ -19,7 +19,7 @@ export default function CompanyList() {
       // and keeping re-fetching the data
       const res = await fetch("/api/auth/companies");
       const data = await res.json();
-      console.log("data", data);
+      // console.log("data", data);
       return data.companies as Company[];
     },
     staleTime: 1000 * 60 * 5, // 5 minutes
@@ -32,7 +32,7 @@ export default function CompanyList() {
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>Error: {error.message}</div>;
 
-  console.log("companies", companies);
+  // console.log("companies", companies);
 
   return (
     <div>

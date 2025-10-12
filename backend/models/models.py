@@ -39,17 +39,17 @@ class Estimate(db.Model):
     total = db.Column(db.Float, nullable=False)
     notes = db.Column(db.JSON, nullable=True, default=list)
 
-    # Foreign keys
+    # Foreign keys (stored in the database)
     customer_id = db.Column(db.Integer, db.ForeignKey('customer.id'), nullable=False)
     company_id = db.Column(db.Integer, db.ForeignKey('company.id'), nullable=False)
     description_id = db.Column(db.Integer, db.ForeignKey('estimate_description.id'), nullable=False)
     created_by_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)  # Add this
 
-    # Relationships
+    # Relationships (Python-level convenience, only exists in python, not in the database)
     customer = db.relationship('Customer', backref='estimates', lazy=True)
     company = db.relationship('Company', backref='estimates', lazy=True)
-    description = db.relationship('EstimateDescription', backref='estimates', lazy=True)
     created_by = db.relationship('User', backref='estimates', lazy=True)
+    description = db.relationship('EstimateDescription', backref='estimate', lazy=True, uselist=False)
 
     created_at = db.Column(db.DateTime, nullable=False, default=datetime.now)
     updated_at = db.Column(db.DateTime, nullable=False, default=datetime.now)
@@ -58,8 +58,7 @@ class Estimate(db.Model):
         return f"<Estimate {self.name}>"
 class EstimateDescription(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-
-    # Title of the description
+    estimate_id = db.Column(db.Integer, db.ForeignKey('estimate.id'), nullable=False)
     title = db.Column(db.String(120), nullable=False, default='')
 
     # Work types for the description (e.g., ['exterior'], ['interior'], or ['exterior', 'interior'])

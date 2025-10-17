@@ -60,7 +60,7 @@ export default function LoginForm() {
     mutationFn: handleLogin,
     onSuccess: (data) => {
       login(data.user);
-      router.push("/");
+      router.push("/dashboard");
     },
   });
 
@@ -258,7 +258,10 @@ export default function LoginForm() {
                       john@rivaspro.com
                     </Badge>
                     <Badge variant="secondary" className="text-xs">
-                      password123
+                      jane@elitepainters.com
+                    </Badge>
+                    <Badge variant="secondary" className="text-xs">
+                      alex@premiumcoatings.com
                     </Badge>
                   </div>
                 </div>

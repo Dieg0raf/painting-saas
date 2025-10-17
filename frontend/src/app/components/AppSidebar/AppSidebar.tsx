@@ -1,7 +1,7 @@
 // components/Sidebar/Sidebar.tsx
 "use client";
 import { useUser } from "@/app/hooks/useUser";
-import { usePathname, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useMutation } from "@tanstack/react-query";
 import {
   Sidebar,
@@ -32,6 +32,7 @@ import {
   LogOut,
   User,
   ChevronDown,
+  Receipt,
 } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
@@ -39,13 +40,18 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 const sidebarItems = [
   {
     title: "Dashboard",
-    url: "/",
+    url: "/dashboard",
     icon: Home,
   },
   {
     title: "Estimates",
     url: "/estimates",
     icon: FileText,
+  },
+  {
+    title: "Invoices",
+    url: "/invoices",
+    icon: Receipt,
   },
   {
     title: "Customers",
@@ -62,7 +68,6 @@ const sidebarItems = [
 export function AppSidebar() {
   const { user, logout } = useUser();
   const router = useRouter();
-  const pathname = usePathname();
 
   const { mutate: logoutMutation } = useMutation({
     mutationFn: async () => {
@@ -82,16 +87,12 @@ export function AppSidebar() {
     logoutMutation();
   };
 
-  if (pathname === "/login") {
-    return null;
-  }
-
   return (
     <Sidebar side="left" collapsible="icon" variant="inset">
       <SidebarHeader className="border-b border-gray-200">
         <SidebarMenu>
           <SidebarMenuItem>
-            <SidebarMenuButton className="w-full justify-center">
+            <SidebarMenuButton className="w-full justify-center ">
               <Avatar className="h-8 w-8">
                 <AvatarImage
                   src={user?.company?.logo}
@@ -120,7 +121,7 @@ export function AppSidebar() {
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton
                     onClick={() => router.push(item.url)}
-                    className="w-full justify-start"
+                    className="w-full justify-start cursor-pointer"
                   >
                     <item.icon className="h-4 w-4" />
                     <span>{item.title}</span>
@@ -137,7 +138,7 @@ export function AppSidebar() {
           <SidebarMenuItem>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <SidebarMenuButton className="w-full justify-start">
+                <SidebarMenuButton className="w-full justify-start cursor-pointer">
                   <Avatar className="h-6 w-6">
                     <AvatarImage src={user?.company?.logo} />
                     <AvatarFallback>

@@ -6,6 +6,7 @@ type UserContextType = {
     setUser: (user: UserProfile | null) => void
     login: (userData: UserProfile) => void
     logout: () => void
+    isSignedIn: boolean
 }
 
 export const UserContext = createContext<UserContextType | undefined>(undefined);

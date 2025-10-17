@@ -60,7 +60,7 @@ export default function LoginForm() {
     mutationFn: handleLogin,
     onSuccess: (data) => {
       login(data.user);
-      router.push("/");
+      router.push("/dashboard");
     },
   });
 

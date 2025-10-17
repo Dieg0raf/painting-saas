@@ -6,7 +6,6 @@ import type { NextRequest } from 'next/server';
 // * Components only load AFTER middleware allows
 export default function middleware(request: NextRequest) {
 
-
     const { pathname } = request.nextUrl;
 
     if (pathname.includes("/api")) {
@@ -24,7 +23,7 @@ export default function middleware(request: NextRequest) {
 
     // Has token + login page = redirect to home
     if (accessToken && isPublicRoute) {
-        return NextResponse.redirect(new URL('/', request.url));
+        return NextResponse.redirect(new URL('/dashboard', request.url));
     }
 
     // Allow request to continue

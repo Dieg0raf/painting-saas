@@ -1,4 +1,3 @@
-// components/Sidebar/Sidebar.tsx
 "use client";
 import { useUser } from "@/app/hooks/useUser";
 import { useRouter } from "next/navigation";
@@ -35,40 +34,12 @@ import {
   Receipt,
 } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-
-// TODO: Add more pages
-const sidebarItems = [
-  {
-    title: "Dashboard",
-    url: "/dashboard",
-    icon: Home,
-  },
-  {
-    title: "Estimates",
-    url: "/estimates",
-    icon: FileText,
-  },
-  {
-    title: "Invoices",
-    url: "/invoices",
-    icon: Receipt,
-  },
-  {
-    title: "Customers",
-    url: "/customers",
-    icon: Users,
-  },
-  {
-    title: "Settings",
-    url: "/settings",
-    icon: Settings,
-  },
-];
+import { useTranslation } from "react-i18next";
 
 export function AppSidebar() {
   const { user, logout } = useUser();
   const router = useRouter();
-
+  const { t } = useTranslation();
   const { mutate: logoutMutation } = useMutation({
     mutationFn: async () => {
       const res = await fetch("/api/auth/logout", {
@@ -82,6 +53,35 @@ export function AppSidebar() {
       router.push("/login");
     },
   });
+
+  // TODO: Add more pages
+  const sidebarItems = [
+    {
+      title: t("nav.dashboard"),
+      url: "/dashboard",
+      icon: Home,
+    },
+    {
+      title: t("nav.estimates"),
+      url: "/estimates",
+      icon: FileText,
+    },
+    {
+      title: t("nav.invoices"),
+      url: "/invoices",
+      icon: Receipt,
+    },
+    {
+      title: t("nav.customers"),
+      url: "/customers",
+      icon: Users,
+    },
+    {
+      title: t("nav.settings"),
+      url: "/settings",
+      icon: Settings,
+    },
+  ];
 
   const handleLogout = () => {
     logoutMutation();
@@ -104,7 +104,7 @@ export function AppSidebar() {
               </Avatar>
               <div className="ml-2 group-data-[collapsible=icon]:hidden">
                 <h2 className="text-sm font-semibold text-gray-900 truncate">
-                  {user?.company?.name || "Company"}
+                  {user?.company?.name || t("company.companyName")}
                 </h2>
               </div>
             </SidebarMenuButton>
@@ -114,7 +114,7 @@ export function AppSidebar() {
 
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel>Navigation</SidebarGroupLabel>
+          <SidebarGroupLabel>{t("common.navigation")}</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {sidebarItems.map((item) => (
@@ -155,15 +155,15 @@ export function AppSidebar() {
                 </SidebarMenuButton>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-56">
-                <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                <DropdownMenuLabel>{t("account.myAccount")}</DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem>
                   <User className="mr-2 h-4 w-4" />
-                  Profile
+                  {t("account.profile")}
                 </DropdownMenuItem>
                 <DropdownMenuItem>
                   <Settings className="mr-2 h-4 w-4" />
-                  Settings
+                  {t("account.settings")}
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem
@@ -171,7 +171,7 @@ export function AppSidebar() {
                   className="text-red-600"
                 >
                   <LogOut className="mr-2 h-4 w-4" />
-                  Logout
+                  {t("account.logout")}
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>

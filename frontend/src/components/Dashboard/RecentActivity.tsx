@@ -17,8 +17,10 @@ import {
   Receipt,
   User,
 } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 export function RecentActivity() {
+  const { t } = useTranslation();
   // Mock data - replace with real data from your API
   const recentItems = [
     {
@@ -96,7 +98,7 @@ export function RecentActivity() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Recent Activity</CardTitle>
+        <CardTitle>{t("activity.recentActivity")}</CardTitle>
       </CardHeader>
       <CardContent>
         <div className="space-y-4">
@@ -130,7 +132,7 @@ export function RecentActivity() {
               </div>
               <div className="flex items-center space-x-2">
                 <Badge className={getStatusColor(item.status)}>
-                  {item.status}
+                  {t(`activity.status.${item.status}`)}
                 </Badge>
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
@@ -143,20 +145,20 @@ export function RecentActivity() {
                       onClick={() => handleView(item.id, item.type)}
                     >
                       <Eye className="mr-2 h-4 w-4" />
-                      View
+                      {t("common.view")}
                     </DropdownMenuItem>
                     <DropdownMenuItem
                       onClick={() => handleEdit(item.id, item.type)}
                     >
                       <Edit className="mr-2 h-4 w-4" />
-                      Edit
+                      {t("common.edit")}
                     </DropdownMenuItem>
                     <DropdownMenuItem
                       onClick={() => handleDelete(item.id, item.type)}
                       className="text-red-600"
                     >
                       <Trash2 className="mr-2 h-4 w-4" />
-                      Delete
+                      {t("common.delete")}
                     </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>

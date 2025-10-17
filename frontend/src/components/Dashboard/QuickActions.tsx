@@ -4,13 +4,15 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Plus, FileText, Receipt, User, Settings } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { useTranslation } from "react-i18next";
 
 export function QuickActions() {
   const router = useRouter();
+  const { t } = useTranslation();
 
   const actions = [
     {
-      title: "New Estimate",
+      title: t("actions.newEstimate"),
       description: "Create a new estimate for a customer",
       icon: FileText,
       onClick: () => router.push("/estimates/new"),
@@ -18,7 +20,7 @@ export function QuickActions() {
       bgColor: "bg-blue-50",
     },
     {
-      title: "New Invoice",
+      title: t("actions.newInvoice"),
       description: "Generate an invoice from an estimate",
       icon: Receipt,
       onClick: () => router.push("/invoices/new"),
@@ -26,7 +28,7 @@ export function QuickActions() {
       bgColor: "bg-green-50",
     },
     {
-      title: "Add Customer",
+      title: t("actions.addCustomer"),
       description: "Add a new customer to your database",
       icon: User,
       onClick: () => router.push("/customers/new"),
@@ -34,7 +36,7 @@ export function QuickActions() {
       bgColor: "bg-purple-50",
     },
     {
-      title: "Settings",
+      title: t("actions.settings"),
       description: "Manage your account and preferences",
       icon: Settings,
       onClick: () => router.push("/settings"),
@@ -48,7 +50,7 @@ export function QuickActions() {
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <Plus className="h-5 w-5" />
-          Quick Actions
+          {t("actions.quickActions")}
         </CardTitle>
       </CardHeader>
       <CardContent>

@@ -3,12 +3,15 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { FileText, Receipt, DollarSign, Clock } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 export function StatsCards() {
+  const { t } = useTranslation();
+
   // Mock data - replace with real data from your API
   const stats = [
     {
-      title: "Total Estimates",
+      title: t("stats.estimates"),
       value: "24",
       change: "+12%",
       changeType: "positive" as const,
@@ -17,7 +20,7 @@ export function StatsCards() {
       bgColor: "bg-blue-50",
     },
     {
-      title: "Pending Estimates",
+      title: t("stats.pendingEstimates"),
       value: "8",
       change: "+2",
       changeType: "neutral" as const,
@@ -26,7 +29,7 @@ export function StatsCards() {
       bgColor: "bg-yellow-50",
     },
     {
-      title: "Total Invoices",
+      title: t("stats.totalInvoices"),
       value: "156",
       change: "+8%",
       changeType: "positive" as const,
@@ -35,7 +38,7 @@ export function StatsCards() {
       bgColor: "bg-green-50",
     },
     {
-      title: "Revenue This Month",
+      title: t("stats.revenueThisMonth"),
       value: "$12,450",
       change: "+15%",
       changeType: "positive" as const,
@@ -69,7 +72,7 @@ export function StatsCards() {
                 {stat.change}
               </Badge>
               <span className="text-xs text-gray-500 ml-2">
-                from last month
+                {t("stats.fromLastMonth")}
               </span>
             </div>
           </CardContent>

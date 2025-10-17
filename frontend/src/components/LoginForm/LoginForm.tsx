@@ -20,6 +20,7 @@ import { Eye, EyeOff, Building2, Mail, Lock, ArrowRight } from "lucide-react";
 import { useUser } from "@/app/hooks/useUser";
 import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
+import { UserProfile } from "@/app/types/auth";
 
 // Zod schema for form validation
 const loginSchema = z.object({
@@ -58,9 +59,9 @@ export default function LoginForm() {
     error,
   } = useMutation({
     mutationFn: handleLogin,
-    onSuccess: (data) => {
-      login(data.user);
-      router.push("/dashboard");
+    onSuccess: (res) => {
+      login(res.user as UserProfile);
+      router.push(res.redirect as string);
     },
   });
 

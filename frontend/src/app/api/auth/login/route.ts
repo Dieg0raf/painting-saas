@@ -24,7 +24,7 @@ export async function POST(request: NextRequest) {
                 roles: data.user.roles,
                 company: data.user.company,
             },
-            redirect: '/',
+            redirect: '/dashboard',
             success: true
         }, { status: 200 });
 

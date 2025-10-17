@@ -1,6 +1,6 @@
-import { StatsCards } from "../../components/Dashboard/StatsCards";
-import { QuickActions } from "../../components/Dashboard/QuickActions";
-import { RecentActivity } from "../../components/Dashboard/RecentActivity";
+import { StatsCards } from "../../../components/Dashboard/StatsCards";
+import { QuickActions } from "../../../components/Dashboard/QuickActions";
+import { RecentActivity } from "../../../components/Dashboard/RecentActivity";
 
 export default function Dashboard() {
   return (

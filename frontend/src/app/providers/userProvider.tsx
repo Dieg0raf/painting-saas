@@ -1,6 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
-import { UserProfile } from "../types/auth";
+import { UserProfile } from "../types/auth/auth";
 import { UserContext } from "../contexts/UserContext";
 
 // Remounting the component will not lose the user data (reads from local storage)

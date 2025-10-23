@@ -1,5 +1,4 @@
 "use client";
-import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import {
@@ -17,6 +16,7 @@ import { MobileEstimatesList } from "./MobileEstimatesList";
 import { DesktopEstimatesTable } from "./DesktopEstimatesTable";
 import { LoadingSpinner } from "../ui/loadingspinner";
 import { useRouter } from "next/navigation";
+import { useEstimateNavigation } from "@/app/hooks/useEstimateNavigation";
 
 // Status configuration for consistent styling
 export const getStatusConfig = (status: string) => {
@@ -79,9 +79,12 @@ export function EstimatesPage() {
     queryKey: ["estimates"],
     queryFn: fetchEstimates,
   });
-  const router = useRouter();
+
+  const { viewEstimate, editEstimate, duplicateEstimate, deleteEstimate } =
+    useEstimateNavigation();
 
   async function fetchEstimates() {
+    // TODO: Add filtering and pagination
     const res = await fetch("/api/estimates");
     const data = await res.json();
 
@@ -126,24 +129,6 @@ export function EstimatesPage() {
     ];
 
     return `${monthShortNames[monthIndex]} ${day}, ${year}`;
-  };
-
-  const handleView = (estimateId: number) => {
-    console.log(`View estimate ${estimateId}`);
-    router.push(`/estimates/${estimateId}`);
-  };
-
-  const handleEdit = (estimateId: number) => {
-    console.log(`Edit estimate ${estimateId}`);
-    router.push(`/estimates/${estimateId}/edit`);
-  };
-
-  const handleDelete = (estimateId: number) => {
-    console.log(`Delete estimate ${estimateId}`);
-  };
-
-  const handleDuplicate = (estimateId: number) => {
-    console.log(`Duplicate estimate ${estimateId}`);
   };
 
   if (isLoading) {
@@ -236,10 +221,10 @@ export function EstimatesPage() {
               {/* Mobile Card Layout */}
               <MobileEstimatesList
                 estimates={estimates}
-                onView={handleView}
-                onEdit={handleEdit}
-                onDelete={handleDelete}
-                onDuplicate={handleDuplicate}
+                onView={viewEstimate}
+                onEdit={editEstimate}
+                onDelete={deleteEstimate}
+                onDuplicate={duplicateEstimate}
                 getStatusConfig={getStatusConfig}
                 formatDate={formatDate}
                 formatCurrency={formatCurrency}
@@ -248,10 +233,10 @@ export function EstimatesPage() {
               {/* Desktop Table Layout */}
               <DesktopEstimatesTable
                 estimates={estimates}
-                onView={handleView}
-                onEdit={handleEdit}
-                onDelete={handleDelete}
-                onDuplicate={handleDuplicate}
+                onView={viewEstimate}
+                onEdit={editEstimate}
+                onDelete={deleteEstimate}
+                onDuplicate={duplicateEstimate}
                 getStatusConfig={getStatusConfig}
                 formatDate={formatDate}
                 formatCurrency={formatCurrency}

@@ -98,20 +98,38 @@ export function EstimateRow({
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
-            <DropdownMenuItem onClick={() => onView(estimate.id)}>
+            <DropdownMenuItem
+              onClick={(e) => {
+                e.stopPropagation();
+                onView(estimate.id);
+              }}
+            >
               <Eye className="mr-2 h-4 w-4" />
               View Details
             </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => onEdit(estimate.id)}>
+            <DropdownMenuItem
+              onClick={(e) => {
+                e.stopPropagation();
+                onEdit(estimate.id);
+              }}
+            >
               <Edit className="mr-2 h-4 w-4" />
               Edit
             </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => onDuplicate(estimate.id)}>
+            <DropdownMenuItem
+              onClick={(e) => {
+                e.stopPropagation();
+                onDuplicate(estimate.id);
+              }}
+            >
               <FileText className="mr-2 h-4 w-4" />
               Duplicate
             </DropdownMenuItem>
             <DropdownMenuItem
-              onClick={() => onDelete(estimate.id)}
+              onClick={(e) => {
+                e.stopPropagation();
+                onDelete(estimate.id);
+              }}
               className="text-red-600"
             >
               <Trash2 className="mr-2 h-4 w-4" />

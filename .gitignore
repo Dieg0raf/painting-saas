@@ -478,3 +478,5 @@ alembic/versions/*.py
 
 tests/
 nextsteps.md
+
+.cursor/

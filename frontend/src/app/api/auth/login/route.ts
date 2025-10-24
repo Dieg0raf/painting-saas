@@ -1,6 +1,6 @@
 import type { NextRequest } from 'next/server'
 import { NextResponse } from 'next/server'
-import { AuthResponse, LoginCredentials } from '@/app/types/auth'
+import { AuthResponse, LoginCredentials } from '@/app/types/auth/auth'
 
 export async function POST(request: NextRequest) {
     const { email, password }: LoginCredentials = await request.json()
@@ -24,7 +24,7 @@ export async function POST(request: NextRequest) {
                 roles: data.user.roles,
                 company: data.user.company,
             },
-            redirect: '/',
+            redirect: '/dashboard',
             success: true
         }, { status: 200 });
 
@@ -34,7 +34,7 @@ export async function POST(request: NextRequest) {
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production',
             sameSite: 'strict',
-            maxAge: 900 // 15 minutes
+            maxAge: 3600 // 1 hour
         });
 
         nextResponse.cookies.set('refresh_token', data.refresh_token, {

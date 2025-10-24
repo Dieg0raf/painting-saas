@@ -22,6 +22,9 @@ from flask_jwt_extended import (
 from database import db
 from models import User, Company, Role
 
+# Routes
+from routes import estimates_bp, customers_bp
+
 app = Flask(__name__)
 
 # Load configurations
@@ -35,6 +38,10 @@ db.init_app(app)
 
 # security
 jwt = JWTManager(app)
+
+# register blueprints
+app.register_blueprint(estimates_bp)
+app.register_blueprint(customers_bp)
 
 with app.app_context():
     try:

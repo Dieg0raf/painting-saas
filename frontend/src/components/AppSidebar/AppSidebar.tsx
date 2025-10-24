@@ -48,9 +48,9 @@ export function AppSidebar() {
       if (!res.ok) throw new Error("Logout failed");
       return res.json();
     },
-    onSuccess: () => {
+    onSuccess: (res) => {
       logout();
-      router.push("/login");
+      router.push(res.redirect as string);
     },
   });
 

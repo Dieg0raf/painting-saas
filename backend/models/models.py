@@ -51,7 +51,7 @@ class Estimate(db.Model):
     customer = db.relationship('Customer', backref='estimates', lazy=True)
     company = db.relationship('Company', backref='estimates', lazy=True)
     created_by = db.relationship('User', backref='estimates', lazy=True)
-    description = db.relationship('EstimateDescription', backref='estimate', lazy=True, uselist=False)
+    description = db.relationship('EstimateDescription', backref='estimate', lazy=True, uselist=False, cascade='all, delete-orphan')
 
     created_at = db.Column(db.DateTime, nullable=False, default=datetime.now)
     updated_at = db.Column(db.DateTime, nullable=False, default=datetime.now)
@@ -83,7 +83,8 @@ class EstimateItem(db.Model):
 
     # row info for each item
     area = db.Column(db.String(100), nullable=False)
-    work_details = db.Column(db.JSON, nullable=False)
+    # TODO: Update to array when changing to Postgres, SQLite does not support ARRAY type
+    work_details = db.Column(db.JSON, nullable=False) 
     notes_extras = db.Column(db.JSON, nullable=True, default=list)
 
     created_at = db.Column(db.DateTime, nullable=False, default=datetime.now)
@@ -97,9 +98,9 @@ class Customer(db.Model):
     name = db.Column(db.String(80), nullable=False)
     phone_number = db.Column(db.String(15), nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
-    logo = db.Column(db.String(120), nullable=False)
 
-    # TODO: Add LLC field
+    company_id = db.Column(db.Integer, db.ForeignKey('company.id'), nullable=False)
+    company = db.relationship('Company', backref='customers', lazy=True)
 
     # Customer address info
     address = db.Column(db.String(120), nullable=False)
@@ -118,6 +119,8 @@ class Customer(db.Model):
 class Company(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     users = db.relationship("User", backref='company', lazy=True)
+
+    # TODO: Add LLC field
 
     # Company address info
     name = db.Column(db.String(80), nullable=False)

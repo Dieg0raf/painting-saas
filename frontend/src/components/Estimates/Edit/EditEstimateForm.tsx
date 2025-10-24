@@ -58,22 +58,20 @@ export function EditEstimateForm({
   };
 
   return (
-    <div className="max-w-5xl mx-auto p-6 space-y-8">
-      <div className="flex items-center justify-between">
+    <div className="max-w-5xl mx-auto p-4 sm:p-6 space-y-6 sm:space-y-8">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-gray-200 pb-4 sm:pb-6 gap-4">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight text-gray-900">
+          <h1 className="text-xl sm:text-2xl font-semibold text-gray-900">
             Edit Estimate
           </h1>
-          <p className="text-gray-600 mt-2">
-            Update estimate details. All changes will be saved automatically.
-          </p>
         </div>
-        <div className="flex gap-3">
+        <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 w-full sm:w-auto sm:flex-shrink-0">
           {onCancel && (
             <Button
               variant="outline"
               onClick={onCancel}
-              className="min-w-[100px]"
+              className="w-full sm:w-auto sm:min-w-[100px] order-2 sm:order-1"
+              aria-label="Cancel editing and discard changes"
             >
               <X className="w-4 h-4 mr-2" />
               Cancel
@@ -83,7 +81,10 @@ export function EditEstimateForm({
             type="submit"
             form="estimate-form"
             disabled={isSubmitting}
-            className="min-w-[140px] bg-blue-600 hover:bg-blue-700"
+            className="w-full sm:w-auto sm:min-w-[140px] bg-blue-600 hover:bg-blue-700 order-1 sm:order-2"
+            aria-label={
+              isSubmitting ? "Saving changes..." : "Save changes to estimate"
+            }
           >
             <Save className="w-4 h-4 mr-2" />
             {isSubmitting ? "Saving..." : "Save Changes"}

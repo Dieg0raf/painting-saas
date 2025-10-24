@@ -14,6 +14,7 @@ import { CustomerInfo } from "./CustomerInfo";
 import { EstimateBasicInfo } from "./EstimateBasicInfo";
 import { ProjectDescription } from "./ProjectDescription";
 import { EstimateNotes } from "./EstimateNotes";
+import { FieldSet, FieldGroup } from "@/components/ui/field";
 
 interface EditEstimateFormProps {
   estimate: Estimate;
@@ -97,17 +98,21 @@ export function EditEstimateForm({
         onSubmit={form.handleSubmit(onSubmit)}
         className="space-y-8"
       >
-        {/* 1. Customer Information - Always first and prominent */}
-        <CustomerInfo customer={estimate.customer} />
+        <FieldSet>
+          <FieldGroup>
+            {/* 1. Customer Information - Always first and prominent */}
+            <CustomerInfo customer={estimate.customer} />
 
-        {/* 2. Estimate Basic Information */}
-        <EstimateBasicInfo form={form} />
+            {/* 2. Estimate Basic Information */}
+            <EstimateBasicInfo form={form} />
 
-        {/* 3. Description with items */}
-        <ProjectDescription form={form} />
+            {/* 3. Description with items */}
+            <ProjectDescription form={form} />
 
-        {/* 4. Estimate Notes */}
-        <EstimateNotes form={form} />
+            {/* 4. Estimate Notes */}
+            <EstimateNotes form={form} />
+          </FieldGroup>
+        </FieldSet>
       </form>
     </div>
   );

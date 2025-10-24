@@ -17,7 +17,7 @@ export default function useEditEstimateOperations(estimateId: string) {
             toast.success('Estimate saved');
         },
         onError: (error) => {
-            toast.error(`Failed to save estimate: ${error.message}`);
+            toast.error(error.message);
         },
     });
 

@@ -18,17 +18,26 @@ import { FieldSet, FieldGroup } from "@/components/ui/field";
 
 interface EditEstimateFormProps {
   estimate: Estimate;
-  onSave?: (data: EstimateFormData) => void;
+  onSave: (data: EstimateFormData) => void;
   onCancel?: () => void;
+  isSaving?: boolean;
+  isSaveError?: boolean;
+  saveError?: Error | null;
+  isSaveSuccess?: boolean;
 }
+
+// TODO: Add a pop up modal for different types of errors (e.g. validation errors, API errors, etc.)
+// TODO: Add a success message modal to be allowed to be used across the app
 
 export function EditEstimateForm({
   estimate,
   onSave,
   onCancel,
+  isSaving,
+  isSaveError,
+  saveError,
+  isSaveSuccess,
 }: EditEstimateFormProps) {
-  const [isSubmitting, setIsSubmitting] = useState(false);
-
   const form = useForm<EstimateFormData>({
     resolver: zodResolver(EditEstimateFormSchema),
     defaultValues: {
@@ -45,17 +54,9 @@ export function EditEstimateForm({
     mode: "onChange",
   });
 
-  const onSubmit = async (data: EstimateFormData) => {
-    setIsSubmitting(true);
-    try {
-      if (onSave) {
-        await onSave(data);
-      }
-    } catch (error) {
-      console.error("Error saving estimate:", error);
-    } finally {
-      setIsSubmitting(false);
-    }
+  const onSubmit = (data: EstimateFormData) => {
+    console.log("Submitting data: ", data);
+    onSave(data);
   };
 
   return (
@@ -81,14 +82,14 @@ export function EditEstimateForm({
           <Button
             type="submit"
             form="estimate-form"
-            disabled={isSubmitting}
+            disabled={isSaving}
             className="w-full sm:w-auto sm:min-w-[140px] bg-blue-600 hover:bg-blue-700 order-1 sm:order-2"
             aria-label={
-              isSubmitting ? "Saving changes..." : "Save changes to estimate"
+              isSaving ? "Saving changes..." : "Save changes to estimate"
             }
           >
             <Save className="w-4 h-4 mr-2" />
-            {isSubmitting ? "Saving..." : "Save Changes"}
+            {isSaving ? "Saving..." : "Save Changes"}
           </Button>
         </div>
       </div>

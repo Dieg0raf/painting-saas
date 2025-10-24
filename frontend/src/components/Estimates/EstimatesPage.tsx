@@ -78,6 +78,7 @@ export function EstimatesPage() {
   const { data, isLoading, error } = useQuery<Estimate[]>({
     queryKey: ["estimates"],
     queryFn: fetchEstimates,
+    staleTime: 1000 * 60 * 5, // 5 minutes
   });
 
   const { viewEstimate, editEstimate, duplicateEstimate, deleteEstimate } =

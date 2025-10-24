@@ -1,13 +1,11 @@
-"use client";
+import { EditEstimateClient } from "@/components/Estimates/Edit/EditEstimateClient";
 
-import { useParams } from "next/navigation";
+export default async function EditEstimatePage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const { id } = await params;
 
-export default function EditEstimatePage() {
-  const { id } = useParams();
-  console.log(`Editing estimate ${id}`);
-  return (
-    <div>
-      <h1>Edit Estimate {id}</h1>
-    </div>
-  );
+  return <EditEstimateClient id={id} />;
 }

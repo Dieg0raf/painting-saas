@@ -83,7 +83,8 @@ class EstimateItem(db.Model):
 
     # row info for each item
     area = db.Column(db.String(100), nullable=False)
-    work_details = db.Column(db.JSON, nullable=False)
+    # TODO: Update to array when changing to Postgres, SQLite does not support ARRAY type
+    work_details = db.Column(db.JSON, nullable=False) 
     notes_extras = db.Column(db.JSON, nullable=True, default=list)
 
     created_at = db.Column(db.DateTime, nullable=False, default=datetime.now)

@@ -1,8 +1,9 @@
-"use client";
-import { useParams } from "next/navigation";
-
-export default function ViewEstimatePage() {
-  const { id } = useParams();
+export default async function ViewEstimatePage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const { id } = await params;
   console.log(`Viewing estimate ${id}`);
   return (
     <div>

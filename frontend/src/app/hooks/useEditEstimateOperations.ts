@@ -2,19 +2,22 @@ import { EstimateFormData } from "@/lib/validations/estimate";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Estimate } from "../types/estimates/estimates";
 import { useRouter } from "next/navigation";
+import { toast } from 'sonner';
 
 export default function useEditEstimateOperations(estimateId: string) {
     const queryClient = useQueryClient();
     const router = useRouter();
-    const { mutate: saveEstimateMutation, isPending: isSaving, isError: isSaveError, error: saveError, isSuccess: isSaveSuccess } = useMutation({
+    const { mutate: saveEstimateMutation, isPending: isSaving } = useMutation({
         mutationFn: (data: EstimateFormData) => saveEstimateApiCall(estimateId, data),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["estimate", estimateId] });
             queryClient.invalidateQueries({ queryKey: ["estimates"] });
+            // TODO: Figure out if there is a need to redirect to the estimate page (or just let the user navigate to the estimate page themselves)
             router.push(`/estimates/${estimateId}`);
+            toast.success('Estimate saved');
         },
         onError: (error) => {
-            console.error("Error: ", error.message);
+            toast.error(error.message);
         },
     });
 
@@ -24,15 +27,11 @@ export default function useEditEstimateOperations(estimateId: string) {
     };
 
     const cancelEdit = () => {
-        console.log(`Cancelling edit for estimate ${estimateId}`);
         router.back();
     };
 
     return {
         isSaving,
-        isSaveError,
-        saveError,
-        isSaveSuccess,
         saveEstimate,
         cancelEdit,
     };

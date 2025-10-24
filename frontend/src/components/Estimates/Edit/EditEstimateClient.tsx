@@ -20,14 +20,7 @@ export function EditEstimateClient({ id }: EditEstimateClientProps) {
     refetchOnReconnect: false,
   });
 
-  const {
-    saveEstimate,
-    cancelEdit,
-    isSaving,
-    isSaveError,
-    saveError,
-    isSaveSuccess,
-  } = useEditEstimateOperations(id);
+  const { saveEstimate, cancelEdit, isSaving } = useEditEstimateOperations(id);
 
   if (isLoading) {
     return <LoadingSpinner />;
@@ -43,9 +36,6 @@ export function EditEstimateClient({ id }: EditEstimateClientProps) {
       onSave={saveEstimate}
       onCancel={cancelEdit}
       isSaving={isSaving}
-      isSaveError={isSaveError}
-      saveError={isSaveError ? (saveError as Error) : undefined}
-      isSaveSuccess={isSaveSuccess}
     />
   );
 }

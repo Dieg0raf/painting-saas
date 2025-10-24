@@ -19,24 +19,15 @@ import { FieldSet, FieldGroup } from "@/components/ui/field";
 interface EditEstimateFormProps {
   estimate: Estimate;
   onSave: (data: EstimateFormData) => void;
-  onCancel?: () => void;
-  isSaving?: boolean;
-  isSaveError?: boolean;
-  saveError?: Error | null;
-  isSaveSuccess?: boolean;
+  onCancel: () => void;
+  isSaving: boolean;
 }
-
-// TODO: Add a pop up modal for different types of errors (e.g. validation errors, API errors, etc.)
-// TODO: Add a success message modal to be allowed to be used across the app
 
 export function EditEstimateForm({
   estimate,
   onSave,
   onCancel,
   isSaving,
-  isSaveError,
-  saveError,
-  isSaveSuccess,
 }: EditEstimateFormProps) {
   const form = useForm<EstimateFormData>({
     resolver: zodResolver(EditEstimateFormSchema),

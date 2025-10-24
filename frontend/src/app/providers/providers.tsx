@@ -4,6 +4,7 @@ import { useState } from "react";
 import { UserProvider } from "./userProvider";
 import { I18nProvider } from "./I18nProvider";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import { Toaster } from "sonner";
 
 export default function Providers({ children }: { children: React.ReactNode }) {
   const [queryClient] = useState(() => new QueryClient());
@@ -12,6 +13,7 @@ export default function Providers({ children }: { children: React.ReactNode }) {
       <I18nProvider>
         <ReactQueryDevtools initialIsOpen={false} />
         <UserProvider>{children}</UserProvider>
+        <Toaster position="top-center" richColors={true} />
       </I18nProvider>
     </QueryClientProvider>
   );

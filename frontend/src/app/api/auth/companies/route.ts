@@ -6,7 +6,7 @@ export async function GET(request: NextRequest) {
         return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const res = await fetch("http://127.0.0.1:5000/api/companies", {
+    const res = await fetch(`${process.env.BACKEND_URL}/api/companies`, {
         method: "GET",
         headers: {
             "Content-Type": "application/json",

@@ -14,20 +14,30 @@ import { CustomerInfo } from "./CustomerInfo";
 import { EstimateBasicInfo } from "./EstimateBasicInfo";
 import { ProjectDescription } from "./ProjectDescription";
 import { EstimateNotes } from "./EstimateNotes";
+import { FieldSet, FieldGroup } from "@/components/ui/field";
 
 interface EditEstimateFormProps {
   estimate: Estimate;
-  onSave?: (data: EstimateFormData) => void;
+  onSave: (data: EstimateFormData) => void;
   onCancel?: () => void;
+  isSaving?: boolean;
+  isSaveError?: boolean;
+  saveError?: Error | null;
+  isSaveSuccess?: boolean;
 }
+
+// TODO: Add a pop up modal for different types of errors (e.g. validation errors, API errors, etc.)
+// TODO: Add a success message modal to be allowed to be used across the app
 
 export function EditEstimateForm({
   estimate,
   onSave,
   onCancel,
+  isSaving,
+  isSaveError,
+  saveError,
+  isSaveSuccess,
 }: EditEstimateFormProps) {
-  const [isSubmitting, setIsSubmitting] = useState(false);
-
   const form = useForm<EstimateFormData>({
     resolver: zodResolver(EditEstimateFormSchema),
     defaultValues: {
@@ -44,36 +54,26 @@ export function EditEstimateForm({
     mode: "onChange",
   });
 
-  const onSubmit = async (data: EstimateFormData) => {
-    setIsSubmitting(true);
-    try {
-      if (onSave) {
-        await onSave(data);
-      }
-    } catch (error) {
-      console.error("Error saving estimate:", error);
-    } finally {
-      setIsSubmitting(false);
-    }
+  const onSubmit = (data: EstimateFormData) => {
+    console.log("Submitting data: ", data);
+    onSave(data);
   };
 
   return (
-    <div className="max-w-5xl mx-auto p-6 space-y-8">
-      <div className="flex items-center justify-between">
+    <div className="max-w-5xl mx-auto p-4 sm:p-6 space-y-6 sm:space-y-8">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-gray-200 pb-4 sm:pb-6 gap-4">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight text-gray-900">
+          <h1 className="text-xl sm:text-2xl font-semibold text-gray-900">
             Edit Estimate
           </h1>
-          <p className="text-gray-600 mt-2">
-            Update estimate details. All changes will be saved automatically.
-          </p>
         </div>
-        <div className="flex gap-3">
+        <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 w-full sm:w-auto sm:flex-shrink-0">
           {onCancel && (
             <Button
               variant="outline"
               onClick={onCancel}
-              className="min-w-[100px]"
+              className="w-full sm:w-auto sm:min-w-[100px] order-2 sm:order-1"
+              aria-label="Cancel editing and discard changes"
             >
               <X className="w-4 h-4 mr-2" />
               Cancel
@@ -82,11 +82,14 @@ export function EditEstimateForm({
           <Button
             type="submit"
             form="estimate-form"
-            disabled={isSubmitting}
-            className="min-w-[140px] bg-blue-600 hover:bg-blue-700"
+            disabled={isSaving}
+            className="w-full sm:w-auto sm:min-w-[140px] bg-blue-600 hover:bg-blue-700 order-1 sm:order-2"
+            aria-label={
+              isSaving ? "Saving changes..." : "Save changes to estimate"
+            }
           >
             <Save className="w-4 h-4 mr-2" />
-            {isSubmitting ? "Saving..." : "Save Changes"}
+            {isSaving ? "Saving..." : "Save Changes"}
           </Button>
         </div>
       </div>
@@ -96,17 +99,21 @@ export function EditEstimateForm({
         onSubmit={form.handleSubmit(onSubmit)}
         className="space-y-8"
       >
-        {/* 1. Customer Information - Always first and prominent */}
-        <CustomerInfo customer={estimate.customer} />
+        <FieldSet>
+          <FieldGroup>
+            {/* 1. Customer Information - Always first and prominent */}
+            <CustomerInfo customer={estimate.customer} />
 
-        {/* 2. Estimate Basic Information */}
-        <EstimateBasicInfo form={form} />
+            {/* 2. Estimate Basic Information */}
+            <EstimateBasicInfo form={form} />
 
-        {/* 3. Description with items */}
-        <ProjectDescription form={form} />
+            {/* 3. Description with items */}
+            <ProjectDescription form={form} />
 
-        {/* 4. Estimate Notes */}
-        <EstimateNotes form={form} />
+            {/* 4. Estimate Notes */}
+            <EstimateNotes form={form} />
+          </FieldGroup>
+        </FieldSet>
       </form>
     </div>
   );

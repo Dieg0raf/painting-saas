@@ -3,7 +3,7 @@ import { Estimate } from "@/app/types/estimates/estimates";
 import { useQuery } from "@tanstack/react-query";
 import { EditEstimateForm } from "./EditEstimateForm";
 import { LoadingSpinner } from "@/components/ui/loadingspinner";
-import { EstimateFormData } from "@/lib/validations/estimate";
+import useEditEstimateOperations from "@/app/hooks/useEditEstimateOperations";
 
 interface EditEstimateClientProps {
   id: string;
@@ -20,13 +20,14 @@ export function EditEstimateClient({ id }: EditEstimateClientProps) {
     refetchOnReconnect: false,
   });
 
-  const handleSave = async (data: EstimateFormData) => {
-    console.log("Saving estimate:", data);
-  };
-
-  const handleCancel = () => {
-    console.log("Cancelling edit");
-  };
+  const {
+    saveEstimate,
+    cancelEdit,
+    isSaving,
+    isSaveError,
+    saveError,
+    isSaveSuccess,
+  } = useEditEstimateOperations(id);
 
   if (isLoading) {
     return <LoadingSpinner />;
@@ -39,8 +40,12 @@ export function EditEstimateClient({ id }: EditEstimateClientProps) {
   return (
     <EditEstimateForm
       estimate={data as Estimate}
-      onSave={handleSave}
-      onCancel={handleCancel}
+      onSave={saveEstimate}
+      onCancel={cancelEdit}
+      isSaving={isSaving}
+      isSaveError={isSaveError}
+      saveError={isSaveError ? (saveError as Error) : undefined}
+      isSaveSuccess={isSaveSuccess}
     />
   );
 }

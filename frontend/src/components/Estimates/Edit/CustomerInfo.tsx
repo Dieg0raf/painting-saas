@@ -2,8 +2,13 @@
 
 import { Customer } from "@/app/types/customers/customers";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Label } from "@/components/ui/label";
 import { User, Mail, Phone, MapPin, Users } from "lucide-react";
+import {
+  FieldSet,
+  FieldGroup,
+  Field,
+  FieldLegend,
+} from "@/components/ui/field";
 
 interface CustomerInfoProps {
   customer: Customer;
@@ -11,67 +16,83 @@ interface CustomerInfoProps {
 
 export function CustomerInfo({ customer }: CustomerInfoProps) {
   return (
-    <Card className="border-2 border-blue-300 bg-gradient-to-r from-blue-50 to-blue-100/50 shadow-lg">
-      <CardHeader className="pb-4">
-        <CardTitle className="flex items-center gap-3 text-blue-900 text-xl">
-          <div className="p-2 bg-blue-600 rounded-lg">
-            <Users className="w-6 h-6 text-white" />
-          </div>
+    <Card
+      className="border border-gray-200 bg-gray-50/50"
+      role="region"
+      aria-labelledby="customer-info-title"
+    >
+      <CardHeader className="pb-3">
+        <CardTitle
+          id="customer-info-title"
+          className="flex items-center gap-2 text-gray-900 text-lg"
+        >
+          <Users className="w-5 h-5 text-blue-600" aria-hidden="true" />
           Customer Information
         </CardTitle>
-        <p className="text-blue-800 font-medium">
-          This estimate is prepared for the customer below. Customer details
-          cannot be modified here.
-        </p>
       </CardHeader>
       <CardContent className="pt-0">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {/* Customer Name */}
-          <div className="space-y-3 bg-white/60 rounded-lg p-4">
-            <Label className="text-sm font-semibold text-blue-800 flex items-center gap-2">
-              <User className="w-4 h-4" />
-              Customer Name
-            </Label>
-            <p className="text-lg font-bold text-gray-900 break-words">
-              {customer.name}
-            </p>
-          </div>
-
-          {/* Email */}
-          <div className="space-y-3 bg-white/60 rounded-lg p-4">
-            <Label className="text-sm font-semibold text-blue-800 flex items-center gap-2">
-              <Mail className="w-4 h-4" />
-              Email Address
-            </Label>
-            <p className="text-base text-gray-900 break-all">
-              {customer.email}
-            </p>
-          </div>
-
-          {/* Phone */}
-          <div className="space-y-3 bg-white/60 rounded-lg p-4">
-            <Label className="text-sm font-semibold text-blue-800 flex items-center gap-2">
-              <Phone className="w-4 h-4" />
-              Phone Number
-            </Label>
-            <p className="text-base text-gray-900">{customer.phone_number}</p>
-          </div>
-
-          {/* Address */}
-          <div className="space-y-3 bg-white/60 rounded-lg p-4 sm:col-span-2 lg:col-span-1">
-            <Label className="text-sm font-semibold text-blue-800 flex items-center gap-2">
-              <MapPin className="w-4 h-4" />
-              Address
-            </Label>
-            <div className="text-base text-gray-900 space-y-1">
-              <p className="font-medium">{customer.address}</p>
-              <p>
-                {customer.city}, {customer.state} {customer.zip_code}
+        <FieldSet>
+          <FieldGroup className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            {/* Customer Name */}
+            <Field>
+              <FieldLegend className="text-sm font-medium text-gray-600 flex items-center gap-1">
+                <User className="w-4 h-4" aria-hidden="true" />
+                Name
+              </FieldLegend>
+              <p
+                className="text-base font-medium text-gray-900"
+                aria-label={`Customer name: ${customer.name}`}
+              >
+                {customer.name}
               </p>
-              <p className="text-sm text-gray-600">{customer.country}</p>
-            </div>
-          </div>
-        </div>
+            </Field>
+
+            {/* Email */}
+            <Field>
+              <FieldLegend className="text-sm font-medium text-gray-600 flex items-center gap-1">
+                <Mail className="w-4 h-4" aria-hidden="true" />
+                Email
+              </FieldLegend>
+              <p
+                className="text-base text-gray-900 break-all"
+                aria-label={`Customer email: ${customer.email}`}
+              >
+                {customer.email}
+              </p>
+            </Field>
+
+            {/* Phone */}
+            <Field>
+              <FieldLegend className="text-sm font-medium text-gray-600 flex items-center gap-1">
+                <Phone className="w-4 h-4" aria-hidden="true" />
+                Phone
+              </FieldLegend>
+              <p
+                className="text-base text-gray-900"
+                aria-label={`Customer phone: ${customer.phone_number}`}
+              >
+                {customer.phone_number}
+              </p>
+            </Field>
+
+            {/* Address */}
+            <Field>
+              <FieldLegend className="text-sm font-medium text-gray-600 flex items-center gap-1">
+                <MapPin className="w-4 h-4" aria-hidden="true" />
+                Address
+              </FieldLegend>
+              <div
+                className="text-base text-gray-900"
+                aria-label={`Customer address: ${customer.address}, ${customer.city}, ${customer.state} ${customer.zip_code}`}
+              >
+                <p className="font-medium">{customer.address}</p>
+                <p className="text-sm text-gray-600">
+                  {customer.city}, {customer.state} {customer.zip_code}
+                </p>
+              </div>
+            </Field>
+          </FieldGroup>
+        </FieldSet>
       </CardContent>
     </Card>
   );

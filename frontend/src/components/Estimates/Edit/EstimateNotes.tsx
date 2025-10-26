@@ -1,6 +1,6 @@
 "use client";
 
-import { FieldArrayPath, UseFormReturn, useFieldArray } from "react-hook-form";
+import { UseFormReturn } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -13,17 +13,18 @@ interface EstimateNotesProps {
 }
 
 export function EstimateNotes({ form }: EstimateNotesProps) {
-  const {
-    fields: notesFields,
-    append: appendNote,
-    remove: removeNote,
-  } = useFieldArray({
-    control: form.control,
-    name: "notes" as FieldArrayPath<EstimateFormData["notes"]>,
-  });
-
-  const addNewNote = () => {
-    appendNote("");
+  const notes = form.watch("notes") || [];
+  const addNote = () => {
+    const currentNotes = form.getValues("notes") || [];
+    console.log("Adding note: ", currentNotes);
+    form.setValue("notes", [...currentNotes, ""]);
+  };
+  const removeNote = (index: number) => {
+    const currentNotes = form.getValues("notes") || [];
+    form.setValue(
+      "notes",
+      currentNotes.filter((_, i) => i !== index)
+    );
   };
 
   return (
@@ -41,7 +42,7 @@ export function EstimateNotes({ form }: EstimateNotesProps) {
             type="button"
             variant="outline"
             size="sm"
-            onClick={addNewNote}
+            onClick={addNote}
             className="w-full sm:w-auto"
             aria-label="Add new note"
           >
@@ -53,7 +54,7 @@ export function EstimateNotes({ form }: EstimateNotesProps) {
       <CardContent className="space-y-4">
         <FieldSet>
           <FieldGroup>
-            {notesFields.length === 0 ? (
+            {notes.length === 0 ? (
               <div className="text-center py-8 border-2 border-dashed border-gray-200 rounded-lg">
                 <StickyNote
                   className="w-8 h-8 text-gray-400 mx-auto mb-3"
@@ -66,7 +67,7 @@ export function EstimateNotes({ form }: EstimateNotesProps) {
                   Add special instructions or important details.
                 </p>
                 <Button
-                  onClick={addNewNote}
+                  onClick={addNote}
                   variant="outline"
                   size="sm"
                   aria-label="Add your first note"
@@ -77,9 +78,9 @@ export function EstimateNotes({ form }: EstimateNotesProps) {
               </div>
             ) : (
               <>
-                {notesFields.map((field, index) => (
+                {notes.map((note, index) => (
                   <Field
-                    key={field.id}
+                    key={index}
                     className="border border-gray-200 rounded-lg p-3"
                     role="group"
                     aria-labelledby={`note-${index + 1}-title`}
@@ -124,7 +125,7 @@ export function EstimateNotes({ form }: EstimateNotesProps) {
                   <Button
                     type="button"
                     variant="outline"
-                    onClick={addNewNote}
+                    onClick={addNote}
                     size="sm"
                     aria-label="Add another note"
                   >

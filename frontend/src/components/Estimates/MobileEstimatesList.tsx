@@ -8,7 +8,6 @@ export function MobileEstimatesList({
   onEdit,
   onDelete,
   onDuplicate,
-  getStatusConfig,
   formatDate,
   formatCurrency,
 }: MobileEstimatesListProps) {
@@ -22,7 +21,6 @@ export function MobileEstimatesList({
           onEdit={onEdit}
           onDelete={onDelete}
           onDuplicate={onDuplicate}
-          getStatusConfig={getStatusConfig}
           formatDate={formatDate}
           formatCurrency={formatCurrency}
         />

@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { FileText, MoreHorizontal, Eye, Edit, Trash2 } from "lucide-react";
 import { EstimateCardProps } from "@/app/types/estimates/componentProps";
+import { getStatusConfig } from "@/lib/estimateStatus";
 
 export function EstimateCard({
   estimate,
@@ -16,7 +17,6 @@ export function EstimateCard({
   onEdit,
   onDelete,
   onDuplicate,
-  getStatusConfig,
   formatDate,
   formatCurrency,
 }: EstimateCardProps) {

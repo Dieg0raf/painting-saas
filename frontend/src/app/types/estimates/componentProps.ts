@@ -1,5 +1,4 @@
 import { Estimate } from "@/app/types/estimates/estimates";
-import { LucideIcon } from "lucide-react";
 
 export interface EstimatesStatsProps {
     estimates: Estimate[];
@@ -18,12 +17,6 @@ export interface EstimateCardProps {
     onEdit: (id: number) => void;
     onDelete: (id: number) => void;
     onDuplicate: (id: number) => void;
-    getStatusConfig: (status: string) => {
-        label: string;
-        icon: LucideIcon;
-        className: string;
-        description: string;
-    };
     formatDate: (date: string) => string;
     formatCurrency: (amount: number) => string;
 }
@@ -34,12 +27,6 @@ export interface EstimateRowProps {
     onEdit: (id: number) => void;
     onDelete: (id: number) => void;
     onDuplicate: (id: number) => void;
-    getStatusConfig: (status: string) => {
-        label: string;
-        icon: LucideIcon;
-        className: string;
-        description: string;
-    };
     formatDate: (date: string) => string;
     formatCurrency: (amount: number) => string;
 }
@@ -50,12 +37,6 @@ export interface MobileEstimatesListProps {
     onEdit: (id: number) => void;
     onDelete: (id: number) => void;
     onDuplicate: (id: number) => void;
-    getStatusConfig: (status: string) => {
-        label: string;
-        icon: LucideIcon;
-        className: string;
-        description: string;
-    };
     formatDate: (date: string) => string;
     formatCurrency: (amount: number) => string;
 }
@@ -66,12 +47,6 @@ export interface DesktopEstimatesTableProps {
     onEdit: (id: number) => void;
     onDelete: (id: number) => void;
     onDuplicate: (id: number) => void;
-    getStatusConfig: (status: string) => {
-        label: string;
-        icon: LucideIcon;
-        className: string;
-        description: string;
-    };
     formatDate: (date: string) => string;
     formatCurrency: (amount: number) => string;
 }

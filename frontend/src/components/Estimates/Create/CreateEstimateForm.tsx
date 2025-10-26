@@ -37,6 +37,16 @@ export function CreateEstimateForm({
       total: 0,
       status: "draft",
       notes: [],
+      customer_snapshot: {
+        name: "",
+        email: "",
+        phone_number: "",
+        address: "",
+        city: "",
+        state: "",
+        zip_code: "",
+        country: "",
+      },
       description: {
         title: "",
         work_types: [],

@@ -14,7 +14,6 @@ export function DesktopEstimatesTable({
   onEdit,
   onDelete,
   onDuplicate,
-  getStatusConfig,
   formatDate,
   formatCurrency,
 }: DesktopEstimatesTableProps) {
@@ -44,7 +43,6 @@ export function DesktopEstimatesTable({
               onEdit={onEdit}
               onDelete={onDelete}
               onDuplicate={onDuplicate}
-              getStatusConfig={getStatusConfig}
               formatDate={formatDate}
               formatCurrency={formatCurrency}
             />

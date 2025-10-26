@@ -19,6 +19,7 @@ import {
   FieldLabel,
   FieldError,
 } from "@/components/ui/field";
+import { getStatusConfig, ALL_STATUSES } from "@/lib/estimateStatus";
 
 interface EstimateBasicInfoProps {
   form: UseFormReturn<EstimateFormData>;
@@ -117,60 +118,21 @@ export function EstimateBasicInfo({ form }: EstimateBasicInfoProps) {
                 <SelectValue placeholder="Select status" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="draft">
-                  <div className="flex items-center gap-2">
-                    <div
-                      className="w-2 h-2 bg-gray-400 rounded-full"
-                      aria-hidden="true"
-                    ></div>
-                    Draft
-                  </div>
-                </SelectItem>
-                <SelectItem value="pending">
-                  <div className="flex items-center gap-2">
-                    <div
-                      className="w-2 h-2 bg-yellow-400 rounded-full"
-                      aria-hidden="true"
-                    ></div>
-                    Pending
-                  </div>
-                </SelectItem>
-                <SelectItem value="accepted">
-                  <div className="flex items-center gap-2">
-                    <div
-                      className="w-2 h-2 bg-green-400 rounded-full"
-                      aria-hidden="true"
-                    ></div>
-                    Accepted
-                  </div>
-                </SelectItem>
-                <SelectItem value="declined">
-                  <div className="flex items-center gap-2">
-                    <div
-                      className="w-2 h-2 bg-red-400 rounded-full"
-                      aria-hidden="true"
-                    ></div>
-                    Declined
-                  </div>
-                </SelectItem>
-                <SelectItem value="in_progress">
-                  <div className="flex items-center gap-2">
-                    <div
-                      className="w-2 h-2 bg-blue-400 rounded-full"
-                      aria-hidden="true"
-                    ></div>
-                    In Progress
-                  </div>
-                </SelectItem>
-                <SelectItem value="completed">
-                  <div className="flex items-center gap-2">
-                    <div
-                      className="w-2 h-2 bg-green-600 rounded-full"
-                      aria-hidden="true"
-                    ></div>
-                    Completed
-                  </div>
-                </SelectItem>
+                {ALL_STATUSES.map((status) => {
+                  const config = getStatusConfig(status);
+
+                  return (
+                    <SelectItem key={status} value={status}>
+                      <div className="flex items-center gap-2">
+                        <config.icon
+                          className={`w-4 h-4 ${config.className} rounded-full`}
+                          aria-hidden="true"
+                        />
+                        {config.label}
+                      </div>
+                    </SelectItem>
+                  );
+                })}
               </SelectContent>
             </Select>
           </Field>

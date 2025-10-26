@@ -16,6 +16,7 @@ import {
   Calendar,
 } from "lucide-react";
 import { EstimateRowProps } from "@/app/types/estimates/componentProps";
+import { getStatusConfig } from "@/lib/estimateStatus";
 
 export function EstimateRow({
   estimate,
@@ -23,7 +24,6 @@ export function EstimateRow({
   onEdit,
   onDelete,
   onDuplicate,
-  getStatusConfig,
   formatDate,
   formatCurrency,
 }: EstimateRowProps) {

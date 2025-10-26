@@ -1,14 +1,7 @@
 "use client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import {
-  FileText,
-  Plus,
-  Clock,
-  CheckCircle,
-  XCircle,
-  AlertCircle,
-} from "lucide-react";
+import { FileText, Plus, AlertCircle } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { Estimate } from "@/app/types/estimates/estimates";
 import { EstimatesStats } from "./EstimatesStats";
@@ -17,61 +10,6 @@ import { DesktopEstimatesTable } from "./DesktopEstimatesTable";
 import { LoadingSpinner } from "../ui/loadingspinner";
 import { useRouter } from "next/navigation";
 import { useEstimateNavigation } from "@/app/hooks/useEstimateNavigation";
-
-// Status configuration for consistent styling
-export const getStatusConfig = (status: string) => {
-  switch (status) {
-    case "draft":
-      return {
-        label: "Draft",
-        icon: FileText,
-        className: "bg-gray-100 text-gray-800",
-        description: "Not yet sent to customer",
-      };
-    case "pending":
-      return {
-        label: "Pending",
-        icon: Clock,
-        className: "bg-yellow-100 text-yellow-800",
-        description: "Waiting for customer response",
-      };
-    case "accepted":
-      return {
-        label: "Accepted",
-        icon: CheckCircle,
-        className: "bg-green-100 text-green-800",
-        description: "Customer has accepted",
-      };
-    case "declined":
-      return {
-        label: "Declined",
-        icon: XCircle,
-        className: "bg-red-100 text-red-800",
-        description: "Customer has declined",
-      };
-    case "completed":
-      return {
-        label: "Completed",
-        icon: CheckCircle,
-        className: "bg-blue-100 text-blue-800",
-        description: "Project completed",
-      };
-    case "in_progress":
-      return {
-        label: "In Progress",
-        icon: Clock,
-        className: "bg-purple-100 text-purple-800",
-        description: "Work in progress",
-      };
-    default:
-      return {
-        label: "Unknown",
-        icon: AlertCircle,
-        className: "bg-gray-100 text-gray-800",
-        description: "Status unknown",
-      };
-  }
-};
 
 export function EstimatesPage() {
   // TODO: Figure out if cacheing is working correctly
@@ -232,7 +170,6 @@ export function EstimatesPage() {
                 onEdit={editEstimate}
                 onDelete={deleteEstimate}
                 onDuplicate={duplicateEstimate}
-                getStatusConfig={getStatusConfig}
                 formatDate={formatDate}
                 formatCurrency={formatCurrency}
               />
@@ -244,7 +181,6 @@ export function EstimatesPage() {
                 onEdit={editEstimate}
                 onDelete={deleteEstimate}
                 onDuplicate={duplicateEstimate}
-                getStatusConfig={getStatusConfig}
                 formatDate={formatDate}
                 formatCurrency={formatCurrency}
               />

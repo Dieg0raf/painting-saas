@@ -35,6 +35,7 @@ export function EditEstimateForm({
       total: estimate.total,
       status: estimate.status,
       notes: estimate.notes || [],
+      customer_snapshot: estimate.customer_snapshot,
       description: {
         title: estimate.description?.title || "",
         work_types: estimate.description?.work_types || [],

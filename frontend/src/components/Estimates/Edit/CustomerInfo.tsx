@@ -1,6 +1,6 @@
 "use client";
 
-import { Customer } from "@/app/types/customers/customers";
+import { CustomerSnapshot } from "@/app/types/estimates/estimates";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { User, Mail, Phone, MapPin, Users } from "lucide-react";
 import {
@@ -11,10 +11,10 @@ import {
 } from "@/components/ui/field";
 
 interface CustomerInfoProps {
-  customer: Customer;
+  customer_snapshot: CustomerSnapshot;
 }
 
-export function CustomerInfo({ customer }: CustomerInfoProps) {
+export function CustomerInfo({ customer_snapshot }: CustomerInfoProps) {
   return (
     <Card
       className="border border-gray-200 bg-gray-50/50"
@@ -41,9 +41,9 @@ export function CustomerInfo({ customer }: CustomerInfoProps) {
               </FieldLegend>
               <p
                 className="text-base font-medium text-gray-900"
-                aria-label={`Customer name: ${customer.name}`}
+                aria-label={`Customer name: ${customer_snapshot.name}`}
               >
-                {customer.name}
+                {customer_snapshot.name}
               </p>
             </Field>
 
@@ -55,9 +55,9 @@ export function CustomerInfo({ customer }: CustomerInfoProps) {
               </FieldLegend>
               <p
                 className="text-base text-gray-900 break-all"
-                aria-label={`Customer email: ${customer.email}`}
+                aria-label={`Customer email: ${customer_snapshot.email}`}
               >
-                {customer.email}
+                {customer_snapshot.email}
               </p>
             </Field>
 
@@ -69,9 +69,9 @@ export function CustomerInfo({ customer }: CustomerInfoProps) {
               </FieldLegend>
               <p
                 className="text-base text-gray-900"
-                aria-label={`Customer phone: ${customer.phone_number}`}
+                aria-label={`Customer phone: ${customer_snapshot.phone_number}`}
               >
-                {customer.phone_number}
+                {customer_snapshot.phone_number}
               </p>
             </Field>
 
@@ -83,11 +83,12 @@ export function CustomerInfo({ customer }: CustomerInfoProps) {
               </FieldLegend>
               <div
                 className="text-base text-gray-900"
-                aria-label={`Customer address: ${customer.address}, ${customer.city}, ${customer.state} ${customer.zip_code}`}
+                aria-label={`Customer address: ${customer_snapshot.address}, ${customer_snapshot.city}, ${customer_snapshot.state} ${customer_snapshot.zip_code}`}
               >
-                <p className="font-medium">{customer.address}</p>
+                <p className="font-medium">{customer_snapshot.address}</p>
                 <p className="text-sm text-gray-600">
-                  {customer.city}, {customer.state} {customer.zip_code}
+                  {customer_snapshot.city}, {customer_snapshot.state}{" "}
+                  {customer_snapshot.zip_code}
                 </p>
               </div>
             </Field>

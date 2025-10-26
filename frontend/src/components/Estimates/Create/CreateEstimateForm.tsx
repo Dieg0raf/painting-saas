@@ -3,49 +3,51 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
-import { Save, X } from "lucide-react";
+import { Save, X, FileText } from "lucide-react";
 import {
   EditEstimateFormSchema,
   EstimateFormData,
 } from "@/lib/validations/estimate";
-import { Estimate } from "@/app/types/estimates/estimates";
-import { CustomerInfo } from "./CustomerInfo";
-import { EstimateBasicInfo } from "./EstimateBasicInfo";
-import { ProjectDescription } from "./ProjectDescription";
-import { EstimateNotes } from "./EstimateNotes";
+import { Customer } from "@/app/types/customers/customers";
+import { CustomerInfo } from "../Edit/CustomerInfo";
+import { EstimateBasicInfo } from "../Edit/EstimateBasicInfo";
+import { ProjectDescription } from "../Edit/ProjectDescription";
+import { EstimateNotes } from "../Edit/EstimateNotes";
 import { FieldSet, FieldGroup } from "@/components/ui/field";
 
-interface EditEstimateFormProps {
-  estimate: Estimate;
+interface CreateEstimateFormProps {
   onSave: (data: EstimateFormData) => void;
   onCancel: () => void;
+  onGeneratePDF: () => void;
   isSaving: boolean;
+  selectedCustomer?: Customer;
 }
 
-export function EditEstimateForm({
-  estimate,
+export function CreateEstimateForm({
   onSave,
   onCancel,
+  onGeneratePDF,
   isSaving,
-}: EditEstimateFormProps) {
+  selectedCustomer,
+}: CreateEstimateFormProps) {
   const form = useForm<EstimateFormData>({
     resolver: zodResolver(EditEstimateFormSchema),
     defaultValues: {
-      name: estimate.name,
-      total: estimate.total,
-      status: estimate.status,
-      notes: estimate.notes || [],
+      name: "",
+      total: 0,
+      status: "draft",
+      notes: [],
       description: {
-        title: estimate.description?.title || "",
-        work_types: estimate.description?.work_types || [],
-        items: estimate.description?.items || [],
+        title: "",
+        work_types: [],
+        items: [],
       },
     },
     mode: "onChange",
   });
 
   const onSubmit = (data: EstimateFormData) => {
-    console.log("Submitting data: ", data);
+    console.log("Creating estimate with data: ", data);
     onSave(data);
   };
 
@@ -54,7 +56,7 @@ export function EditEstimateForm({
       <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-gray-200 pb-4 sm:pb-6 gap-4">
         <div>
           <h1 className="text-xl sm:text-2xl font-semibold text-gray-900">
-            Edit Estimate
+            Create New Estimate
           </h1>
         </div>
         <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 w-full sm:w-auto sm:flex-shrink-0">
@@ -62,24 +64,33 @@ export function EditEstimateForm({
             <Button
               variant="outline"
               onClick={onCancel}
-              className="w-full sm:w-auto sm:min-w-[100px] order-2 sm:order-1"
-              aria-label="Cancel editing and discard changes"
+              className="w-full sm:w-auto sm:min-w-[100px] order-3 sm:order-1"
+              aria-label="Cancel creating estimate"
             >
               <X className="w-4 h-4 mr-2" />
               Cancel
+            </Button>
+          )}
+          {onGeneratePDF && (
+            <Button
+              variant="outline"
+              onClick={onGeneratePDF}
+              className="w-full sm:w-auto sm:min-w-[120px] order-2 sm:order-2"
+              aria-label="Generate PDF preview"
+            >
+              <FileText className="w-4 h-4 mr-2" />
+              Preview PDF
             </Button>
           )}
           <Button
             type="submit"
             form="estimate-form"
             disabled={isSaving}
-            className="w-full sm:w-auto sm:min-w-[140px] bg-blue-600 hover:bg-blue-700 order-1 sm:order-2"
-            aria-label={
-              isSaving ? "Saving changes..." : "Save changes to estimate"
-            }
+            className="w-full sm:w-auto sm:min-w-[140px] bg-blue-600 hover:bg-blue-700 order-1 sm:order-3"
+            aria-label={isSaving ? "Creating estimate..." : "Create estimate"}
           >
             <Save className="w-4 h-4 mr-2" />
-            {isSaving ? "Saving..." : "Save Changes"}
+            {isSaving ? "Creating..." : "Create Estimate"}
           </Button>
         </div>
       </div>
@@ -92,7 +103,7 @@ export function EditEstimateForm({
         <FieldSet>
           <FieldGroup>
             {/* 1. Customer Information - Always first and prominent */}
-            <CustomerInfo customer_snapshot={estimate.customer_snapshot} />
+            {/* <CustomerInfo customer={selectedCustomer} /> */}
 
             {/* 2. Estimate Basic Information */}
             <EstimateBasicInfo form={form} />

@@ -84,6 +84,8 @@ export function EstimatesPage() {
   const { viewEstimate, editEstimate, duplicateEstimate, deleteEstimate } =
     useEstimateNavigation();
 
+  const router = useRouter();
+
   async function fetchEstimates() {
     // TODO: Add filtering and pagination
     const res = await fetch("/api/estimates");
@@ -182,9 +184,13 @@ export function EstimatesPage() {
             Manage your project estimates and track customer responses
           </p>
         </div>
-        <Button className="w-full sm:w-auto" aria-label="Create new estimate">
+        <Button
+          className="w-full sm:w-auto"
+          aria-label="Create new estimate"
+          onClick={() => router.push("/estimates/create")}
+        >
           <Plus className="h-4 w-4 mr-2" />
-          New Estimate
+          Create Estimate
         </Button>
       </div>
 

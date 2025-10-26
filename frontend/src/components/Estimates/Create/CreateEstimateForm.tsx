@@ -37,16 +37,27 @@ export function CreateEstimateForm({
       total: 0,
       status: "draft",
       notes: [],
-      customer_snapshot: {
-        name: "",
-        email: "",
-        phone_number: "",
-        address: "",
-        city: "",
-        state: "",
-        zip_code: "",
-        country: "",
-      },
+      customer_snapshot: selectedCustomer
+        ? {
+            name: selectedCustomer.name || "",
+            email: selectedCustomer.email || "",
+            phone_number: selectedCustomer.phone_number || "",
+            address: selectedCustomer.address || "",
+            city: selectedCustomer.city || "",
+            state: selectedCustomer.state || "",
+            zip_code: selectedCustomer.zip_code || "",
+            country: selectedCustomer.country || "",
+          }
+        : {
+            name: "",
+            email: "",
+            phone_number: "",
+            address: "",
+            city: "",
+            state: "",
+            zip_code: "",
+            country: "",
+          },
       description: {
         title: "",
         work_types: [],
@@ -113,7 +124,7 @@ export function CreateEstimateForm({
         <FieldSet>
           <FieldGroup>
             {/* 1. Customer Information - Always first and prominent */}
-            {/* <CustomerInfo customer={selectedCustomer} /> */}
+            <CustomerInfo form={form} />
 
             {/* 2. Estimate Basic Information */}
             <EstimateBasicInfo form={form} />

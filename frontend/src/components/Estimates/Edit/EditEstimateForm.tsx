@@ -93,7 +93,7 @@ export function EditEstimateForm({
         <FieldSet>
           <FieldGroup>
             {/* 1. Customer Information - Always first and prominent */}
-            <CustomerInfo customer_snapshot={estimate.customer_snapshot} />
+            <CustomerInfo form={form} />
 
             {/* 2. Estimate Basic Information */}
             <EstimateBasicInfo form={form} />

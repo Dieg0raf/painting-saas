@@ -31,7 +31,6 @@ export type EstimateItem = {
 }
 
 export type CustomerSnapshot = {
-    id: number;
     name: string;
     email: string;
     phone_number: string;

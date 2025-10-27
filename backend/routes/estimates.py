@@ -159,12 +159,49 @@ def create_estimate():
             logger.error(f"User not found")
             return jsonify({"error": "User not found"}), 404
         
+        customer_id = data.get('customer_id')
+        customer_snapshot_data = data.get('customer_snapshot')
+        
+        if not customer_id and not customer_snapshot_data:
+            logger.error(f"Customer ID or customer snapshot required")
+            return jsonify({"error": "Customer ID or customer snapshot required"}), 400
+
+        logger.info(f"Customer ID: {customer_id}, Customer snapshot data: {customer_snapshot_data}")
+        if not customer_id and customer_snapshot_data:
+            # Try to find existing customer by email
+            customer = Customer.query.filter_by(
+                email=customer_snapshot_data.get('email'),
+                company_id=user.company_id
+            ).first()
+            
+            if not customer:
+                logger.info(f"Creating new customer")
+                # Create new customer
+                customer = Customer(
+                    name=customer_snapshot_data.get('name'),
+                    email=customer_snapshot_data.get('email'),
+                    phone_number=customer_snapshot_data.get('phone_number'),
+                    address=customer_snapshot_data.get('address'),
+                    city=customer_snapshot_data.get('city'),
+                    state=customer_snapshot_data.get('state'),
+                    zip_code=customer_snapshot_data.get('zip_code'),
+                    country=customer_snapshot_data.get('country'),
+                    company_id=user.company_id
+                )
+                db.session.add(customer)
+                db.session.flush()
+                logger.info(f"Created new customer with id: {customer.id}")
+            else:
+                logger.info(f"Found existing customer with id: {customer.id}")
+            customer_id = customer.id
+            logger.info(f"Customer ID: {customer_id}")
+        
         # Create Estimate first to get estimate.id
         estimate = Estimate(
             name=data.get('name'),
             total=data.get('total'),
             notes=data.get('notes'),
-            customer_id=data.get('customer_id'),
+            customer_id=customer_id,
             company_id=user.company_id,
             created_by_id=user.id,
             status=EstimateStatus.DRAFT,

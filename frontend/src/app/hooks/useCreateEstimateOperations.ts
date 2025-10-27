@@ -11,6 +11,7 @@ export default function useCreateEstimateOperations() {
     const { mutate: createEstimateMutation, isPending: isCreating, isSuccess: isCreateSuccess } = useMutation({
         mutationFn: (data: EstimateFormData) => createEstimateApiCall(data),
         onSuccess: (data) => {
+            console.info("Estimate created successfully: ", data);
             queryClient.invalidateQueries({ queryKey: ["estimates"] });
             toast.success('Estimate created successfully!');
             router.push(`/estimates/${data.id}`);
@@ -45,16 +46,13 @@ export default function useCreateEstimateOperations() {
 async function createEstimateApiCall(data: EstimateFormData) {
     const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/estimates`, {
         method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-        },
         body: JSON.stringify(data),
     });
     if (!res.ok) {
         console.error("Error: ", res.status);
         console.error("Error: ", res.statusText);
-        throw new Error("Failed to create estimate");
+        throw new Error(res.statusText);
     }
     const responseData = await res.json();
-    return responseData as Estimate;
+    return responseData.estimate as Estimate;
 }

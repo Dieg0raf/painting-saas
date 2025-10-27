@@ -13,8 +13,8 @@ export default function useCreateEstimateOperations() {
         onSuccess: (data) => {
             console.info("Estimate created successfully: ", data);
             queryClient.invalidateQueries({ queryKey: ["estimates"] });
-            toast.success('Estimate created successfully!');
             router.push(`/estimates/${data.id}`);
+            toast.success('Estimate created successfully!');
         },
         onError: (error) => {
             toast.error(error.message);
@@ -26,8 +26,8 @@ export default function useCreateEstimateOperations() {
     };
 
     const cancelCreate = () => {
-        toast.info('Cancelling estimate creation');
         router.back();
+        toast.info('Cancelling estimate creation');
     };
 
     const generatePDF = () => {

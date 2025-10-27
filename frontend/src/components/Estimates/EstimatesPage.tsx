@@ -10,6 +10,7 @@ import { DesktopEstimatesTable } from "./DesktopEstimatesTable";
 import { LoadingSpinner } from "../ui/loadingspinner";
 import { useRouter } from "next/navigation";
 import { useEstimateNavigation } from "@/app/hooks/useEstimateNavigation";
+import useDeleteEstimateOperations from "@/app/hooks/useDeleteEstimateOperations";
 
 export function EstimatesPage() {
   // TODO: Figure out if cacheing is working correctly
@@ -19,8 +20,9 @@ export function EstimatesPage() {
     staleTime: 1000 * 60 * 5, // 5 minutes
   });
 
-  const { viewEstimate, editEstimate, duplicateEstimate, deleteEstimate } =
+  const { viewEstimate, editEstimate, duplicateEstimate } =
     useEstimateNavigation();
+  const { deleteEstimate } = useDeleteEstimateOperations();
 
   const router = useRouter();
 

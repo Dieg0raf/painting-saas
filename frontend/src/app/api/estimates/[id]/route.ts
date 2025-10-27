@@ -47,3 +47,25 @@ export async function PATCH(request: NextRequest, { params }: { params: { id: st
     const responseData: Estimate = await res.json();
     return NextResponse.json(responseData);
 }
+
+export async function DELETE(request: NextRequest, { params }: { params: { id: string } }) {
+    const { id } = await params;
+    const accessToken = request.cookies.get("access_token");
+    if (!accessToken) {
+        console.error("Unauthorized: No access token found in cookies");
+        return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+    const res = await fetch(`${process.env.BACKEND_URL}/api/estimates/${id}`, {
+        method: "DELETE",
+        headers: {
+            "Authorization": `Bearer ${accessToken.value}`,
+        },
+    });
+    if (!res.ok) {
+        console.error("Error: ", res.status);
+        console.error("Error: ", res.statusText);
+        return NextResponse.json({ error: res.statusText }, { status: res.status });
+    }
+    const responseData = await res.json();
+    return NextResponse.json(responseData);
+}

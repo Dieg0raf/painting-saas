@@ -9,10 +9,10 @@ import {
   EstimateFormData,
 } from "@/lib/validations/estimate";
 import { Customer } from "@/app/types/customers/customers";
-import { CustomerInfo } from "../Edit/CustomerInfo";
-import { EstimateBasicInfo } from "../Edit/EstimateBasicInfo";
-import { ProjectDescription } from "../Edit/ProjectDescription";
-import { EstimateNotes } from "../Edit/EstimateNotes";
+import { CustomerInfo } from "../Shared/CustomerInfo";
+import { EstimateBasicInfo } from "../Shared/EstimateBasicInfo";
+import { ProjectDescription } from "../Shared/ProjectDescription";
+import { EstimateNotes } from "../Shared/EstimateNotes";
 import { FieldSet, FieldGroup } from "@/components/ui/field";
 
 interface CreateEstimateFormProps {

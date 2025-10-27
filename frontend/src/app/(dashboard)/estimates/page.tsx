@@ -1,5 +1,5 @@
-import { EstimatesPage as EstimatesPageComponent } from "../../../components/Estimates/EstimatesPage";
+import { EstimatesPage } from "@/components/Estimates/List/EstimatesPage";
 
 export default function Estimates() {
-  return <EstimatesPageComponent />;
+  return <EstimatesPage />;
 }

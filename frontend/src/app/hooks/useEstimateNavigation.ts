@@ -24,18 +24,10 @@ export function useEstimateNavigation() {
         // router.push(`/estimates/new?duplicate=${estimateId}`);
     }, []);
 
-    const deleteEstimate = useCallback((estimateId: number) => {
-        if (confirm('Are you sure you want to delete this estimate?')) {
-            console.log('Deleting estimate:', estimateId);
-            // router.refresh();
-        }
-    }, []);
-
     return {
         viewEstimate,
         editEstimate,
         createEstimate,
         duplicateEstimate,
-        deleteEstimate,
     };
 }

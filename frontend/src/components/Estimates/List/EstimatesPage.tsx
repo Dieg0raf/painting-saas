@@ -7,7 +7,7 @@ import { Estimate } from "@/app/types/estimates/estimates";
 import { EstimatesStats } from "./EstimatesStats";
 import { MobileEstimatesList } from "./MobileEstimatesList";
 import { DesktopEstimatesTable } from "./DesktopEstimatesTable";
-import { LoadingSpinner } from "../ui/loadingspinner";
+import { LoadingSpinner } from "../../ui/loadingspinner";
 import { useRouter } from "next/navigation";
 import { useEstimateNavigation } from "@/app/hooks/useEstimateNavigation";
 import useDeleteEstimateOperations from "@/app/hooks/useDeleteEstimateOperations";

@@ -19,9 +19,15 @@ export function useEstimateNavigation() {
         // router.push('/estimates/new');
     }, []);
 
+    const duplicateEstimate = useCallback((estimateId: number) => {
+        console.log(`Duplicating estimate ${estimateId}`);
+        // router.push(`/estimates/new?duplicate=${estimateId}`);
+    }, []);
+
     return {
         viewEstimate,
         editEstimate,
         createEstimate,
+        duplicateEstimate,
     };
 }

@@ -1,6 +1,7 @@
 "use client";
 
 import { UseFormReturn } from "react-hook-form";
+import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import {
   Select,
@@ -120,16 +121,14 @@ export function EstimateBasicInfo({ form }: EstimateBasicInfoProps) {
               <SelectContent>
                 {ALL_STATUSES.map((status) => {
                   const config = getStatusConfig(status);
+                  const StatusIcon = config.icon;
 
                   return (
                     <SelectItem key={status} value={status}>
-                      <div className="flex items-center gap-2">
-                        <config.icon
-                          className={`w-4 h-4 ${config.className} rounded-full`}
-                          aria-hidden="true"
-                        />
+                      <Badge className={config.className}>
+                        <StatusIcon className="h-3 w-3 mr-1" />
                         {config.label}
-                      </div>
+                      </Badge>
                     </SelectItem>
                   );
                 })}

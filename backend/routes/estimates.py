@@ -204,7 +204,7 @@ def create_estimate():
             customer_id=customer_id,
             company_id=user.company_id,
             created_by_id=user.id,
-            status=EstimateStatus.DRAFT,
+            status=EstimateStatus[data.get('status').upper()] if data.get('status') else EstimateStatus.DRAFT
         )
         db.session.add(estimate)
         db.session.flush()  # Get estimate.id

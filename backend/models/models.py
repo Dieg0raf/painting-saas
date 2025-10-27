@@ -16,7 +16,7 @@ class EstimateStatus(enum.Enum):
     ACCEPTED = 'accepted'
     DECLINED = 'declined'
     COMPLETED = 'completed'
-    PROGRESS = 'in_progress'
+    IN_PROGRESS = 'in_progress'
 
 
 # junction table (an association table)

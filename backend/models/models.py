@@ -16,7 +16,7 @@ class EstimateStatus(enum.Enum):
     ACCEPTED = 'accepted'
     DECLINED = 'declined'
     COMPLETED = 'completed'
-    PROGRESS = 'in_progress'
+    IN_PROGRESS = 'in_progress'
 
 
 # junction table (an association table)
@@ -31,6 +31,22 @@ class Role(db.Model):
 
     def __repr__(self):
         return f"<Role {self.name}>"
+    
+class CustomerSnapShot(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    estimate_id = db.Column(db.Integer, db.ForeignKey('estimate.id'), nullable=False)
+    name = db.Column(db.String(80), nullable=False)
+    phone_number = db.Column(db.String(15), nullable=False)
+    email = db.Column(db.String(120), nullable=False)
+    address = db.Column(db.String(120), nullable=False)
+    city = db.Column(db.String(120), nullable=False)
+    state = db.Column(db.String(120), nullable=False)
+    zip_code = db.Column(db.String(120), nullable=False)
+    country = db.Column(db.String(120), nullable=False)
+
+    def __repr__(self):
+        return f"<CustomerSnapShot {self.id}>"
+
 class Estimate(db.Model):
     id = db.Column(db.Integer, primary_key=True)
 
@@ -41,6 +57,11 @@ class Estimate(db.Model):
     name = db.Column(db.String(80), nullable=False)
     total = db.Column(db.Float, nullable=False)
     notes = db.Column(db.JSON, nullable=True, default=list)
+
+    # uselist=false - one-to-one relationship (crucial to one-to-one relationships, indicating that the Estimate will only have one CustomerSnapShot)
+    # cascade='all, delete-orphan' - delete the customer snapshot if the estimate is deleted
+    # backref='estimate' - creates a estimate attribute on the CustomerSnapShot model, allowing access to the related CustomerSnapShot instance
+    customer_snapshot = db.relationship('CustomerSnapShot', backref='estimate', lazy=True, uselist=False, cascade='all, delete-orphan')
 
     # Foreign keys (stored in the database)
     customer_id = db.Column(db.Integer, db.ForeignKey('customer.id'), nullable=False)

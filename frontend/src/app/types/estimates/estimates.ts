@@ -1,4 +1,3 @@
-import { Customer } from "../customers/customers";
 
 export type EstimateStatus = "draft" | "pending" | "accepted" | "declined" | "completed" | "in_progress";
 export type WorkType = "exterior" | "interior";
@@ -12,7 +11,7 @@ export type Estimate = {
     created_at: string;
     updated_at: string;
     customer_id: number;
-    customer: Customer
+    customer_snapshot: CustomerSnapshot;
     status: EstimateStatus;
     description: EstimateDescription;
 }
@@ -29,4 +28,15 @@ export type EstimateItem = {
     area: string;
     work_details: string[];
     notes_extras: string[];
+}
+
+export type CustomerSnapshot = {
+    name: string;
+    email: string;
+    phone_number: string;
+    address: string;
+    city: string;
+    state: string;
+    zip_code: string;
+    country: string;
 }

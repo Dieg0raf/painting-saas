@@ -16,6 +16,7 @@ import {
   Calendar,
 } from "lucide-react";
 import { EstimateRowProps } from "@/app/types/estimates/componentProps";
+import { getStatusConfig } from "@/lib/estimateStatus";
 
 export function EstimateRow({
   estimate,
@@ -23,7 +24,6 @@ export function EstimateRow({
   onEdit,
   onDelete,
   onDuplicate,
-  getStatusConfig,
   formatDate,
   formatCurrency,
 }: EstimateRowProps) {
@@ -41,7 +41,7 @@ export function EstimateRow({
       }}
       tabIndex={0}
       role="button"
-      aria-label={`View estimate ${estimate.id} for ${estimate.customer.name}`}
+      aria-label={`View estimate ${estimate.id} for ${estimate.customer_snapshot.name}`}
     >
       <TableCell className="font-medium">
         <div className="flex items-center gap-2">
@@ -51,9 +51,11 @@ export function EstimateRow({
       <TableCell>
         <div>
           <div className="font-medium text-gray-900">
-            {estimate.customer.name}
+            {estimate.customer_snapshot.name}
           </div>
-          <div className="text-sm text-gray-500">{estimate.customer.email}</div>
+          <div className="text-sm text-gray-500">
+            {estimate.customer_snapshot.email}
+          </div>
         </div>
       </TableCell>
       <TableCell>

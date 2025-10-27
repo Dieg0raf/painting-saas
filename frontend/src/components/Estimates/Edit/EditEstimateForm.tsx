@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
@@ -36,6 +35,7 @@ export function EditEstimateForm({
       total: estimate.total,
       status: estimate.status,
       notes: estimate.notes || [],
+      customer_snapshot: estimate.customer_snapshot,
       description: {
         title: estimate.description?.title || "",
         work_types: estimate.description?.work_types || [],
@@ -93,7 +93,7 @@ export function EditEstimateForm({
         <FieldSet>
           <FieldGroup>
             {/* 1. Customer Information - Always first and prominent */}
-            <CustomerInfo customer={estimate.customer} />
+            <CustomerInfo form={form} />
 
             {/* 2. Estimate Basic Information */}
             <EstimateBasicInfo form={form} />

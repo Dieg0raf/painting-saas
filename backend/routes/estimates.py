@@ -1,6 +1,6 @@
 from flask import Blueprint, jsonify, request
 from database import db
-from models import User, Estimate, EstimateDescription, EstimateItem, EstimateStatus, Customer
+from models import User, Estimate, EstimateDescription, EstimateItem, EstimateStatus, Customer, CustomerSnapShot
 from utils import logger, required_roles
 from flask_jwt_extended import jwt_required, get_jwt_identity
 
@@ -40,7 +40,7 @@ def get_estimates():
         # TODO: add pydantic models for the response
 
 
-        estimates = Estimate.query.filter_by(company_id=user.company_id).join(Customer).all()
+        estimates = Estimate.query.filter_by(company_id=user.company_id).join(CustomerSnapShot).all()
         if not estimates:
             logger.error(f"No estimates found")
             return jsonify({"estimates": []}), 200
@@ -54,15 +54,15 @@ def get_estimates():
                     "total": estimate.total,
                     "notes": estimate.notes,
                     "customer_id": estimate.customer_id,
-                    "customer": {
-                        "name": estimate.customer.name,
-                        "email": estimate.customer.email,
-                        "phone_number": estimate.customer.phone_number,
-                        "address": estimate.customer.address,
-                        "city": estimate.customer.city,
-                        "state": estimate.customer.state,
-                        "zip_code": estimate.customer.zip_code,
-                        "country": estimate.customer.country,
+                    "customer_snapshot": {
+                        "name": estimate.customer_snapshot.name,
+                        "email": estimate.customer_snapshot.email,
+                        "phone_number": estimate.customer_snapshot.phone_number,
+                        "address": estimate.customer_snapshot.address,
+                        "city": estimate.customer_snapshot.city,
+                        "state": estimate.customer_snapshot.state,
+                        "zip_code": estimate.customer_snapshot.zip_code,
+                        "country": estimate.customer_snapshot.country,
                     },
                     "status": estimate.status.value,
                     "created_at": estimate.created_at,
@@ -110,15 +110,15 @@ def get_estimate(estimate_id):
                     "total": estimate.total,
                     "notes": estimate.notes,
                     "customer_id": estimate.customer_id,
-                    "customer": {
-                        "name": estimate.customer.name,
-                        "email": estimate.customer.email,
-                        "phone_number": estimate.customer.phone_number,
-                        "address": estimate.customer.address,
-                        "city": estimate.customer.city,
-                        "state": estimate.customer.state,
-                        "zip_code": estimate.customer.zip_code,
-                        "country": estimate.customer.country,
+                    "customer_snapshot": {
+                        "name": estimate.customer_snapshot.name,
+                        "email": estimate.customer_snapshot.email,
+                        "phone_number": estimate.customer_snapshot.phone_number,
+                        "address": estimate.customer_snapshot.address,
+                        "city": estimate.customer_snapshot.city,
+                        "state": estimate.customer_snapshot.state,
+                        "zip_code": estimate.customer_snapshot.zip_code,
+                        "country": estimate.customer_snapshot.country,
                     },
                     "status": estimate.status.value,
                     "created_at": estimate.created_at,
@@ -158,18 +158,71 @@ def create_estimate():
         if not user:
             logger.error(f"User not found")
             return jsonify({"error": "User not found"}), 404
+        
+        customer_id = data.get('customer_id')
+        customer_snapshot_data = data.get('customer_snapshot')
+        
+        if not customer_id and not customer_snapshot_data:
+            logger.error(f"Customer ID or customer snapshot required")
+            return jsonify({"error": "Customer ID or customer snapshot required"}), 400
 
+        logger.info(f"Customer ID: {customer_id}, Customer snapshot data: {customer_snapshot_data}")
+        if not customer_id and customer_snapshot_data:
+            # Try to find existing customer by email
+            customer = Customer.query.filter_by(
+                email=customer_snapshot_data.get('email'),
+                company_id=user.company_id
+            ).first()
+            
+            if not customer:
+                logger.info(f"Creating new customer")
+                # Create new customer
+                customer = Customer(
+                    name=customer_snapshot_data.get('name'),
+                    email=customer_snapshot_data.get('email'),
+                    phone_number=customer_snapshot_data.get('phone_number'),
+                    address=customer_snapshot_data.get('address'),
+                    city=customer_snapshot_data.get('city'),
+                    state=customer_snapshot_data.get('state'),
+                    zip_code=customer_snapshot_data.get('zip_code'),
+                    country=customer_snapshot_data.get('country'),
+                    company_id=user.company_id
+                )
+                db.session.add(customer)
+                db.session.flush()
+                logger.info(f"Created new customer with id: {customer.id}")
+            else:
+                logger.info(f"Found existing customer with id: {customer.id}")
+            customer_id = customer.id
+            logger.info(f"Customer ID: {customer_id}")
+        
+        # Create Estimate first to get estimate.id
         estimate = Estimate(
             name=data.get('name'),
             total=data.get('total'),
             notes=data.get('notes'),
-            customer_id=data.get('customer_id'),
+            customer_id=customer_id,
             company_id=user.company_id,
             created_by_id=user.id,
-            status=EstimateStatus.DRAFT,
+            status=EstimateStatus[data.get('status').upper()] if data.get('status') else EstimateStatus.DRAFT
         )
         db.session.add(estimate)
-        db.session.flush()  # Assigns estimate.id before using it
+        db.session.flush()  # Get estimate.id
+
+        # Create customer snapshot with estimate_id
+        customer_snapshot = CustomerSnapShot(
+            estimate_id=estimate.id,
+            name=data.get('customer_snapshot').get('name'),
+            phone_number=data.get('customer_snapshot').get('phone_number'),
+            email=data.get('customer_snapshot').get('email'),
+            address=data.get('customer_snapshot').get('address'),
+            city=data.get('customer_snapshot').get('city'),
+            state=data.get('customer_snapshot').get('state'),
+            zip_code=data.get('customer_snapshot').get('zip_code'),
+            country=data.get('customer_snapshot').get('country'),
+        )
+        db.session.add(customer_snapshot)
+        db.session.flush()  
 
         description = EstimateDescription(
             estimate_id=estimate.id,
@@ -198,17 +251,16 @@ def create_estimate():
             "total": estimate.total,
             "notes": estimate.notes,
             "customer_id": estimate.customer_id,
-            # TODO: Add customer to the response (if needed for frontend - not sure if needed)
-            # "customer": {
-            #     "name": estimate.customer.name,
-            #     "email": estimate.customer.email,
-            #     "phone_number": estimate.customer.phone_number,
-            #     "address": estimate.customer.address,
-            #     "city": estimate.customer.city,
-            #     "state": estimate.customer.state,
-            #     "zip_code": estimate.customer.zip_code,
-            #     "country": estimate.customer.country,
-            # },
+            "customer_snapshot": {
+                "name": customer_snapshot.name,
+                "email": customer_snapshot.email,
+                "phone_number": customer_snapshot.phone_number,
+                "address": customer_snapshot.address,
+                "city": customer_snapshot.city,
+                "state": customer_snapshot.state,
+                "zip_code": customer_snapshot.zip_code,
+                "country": customer_snapshot.country,
+            },
             "status": estimate.status.value,
             "created_at": estimate.created_at,
             "updated_at": estimate.updated_at,
@@ -268,9 +320,27 @@ def update_estimate(estimate_id):
         if 'notes' in data:
             estimate.notes = data['notes']
             print(f"Estimate notes updated to: {estimate.notes}")
-        if 'customer_id' in data:
-            estimate.customer_id = data['customer_id']
-            print(f"Estimate customer id updated to: {estimate.customer_id}")
+        if 'customer_snapshot' in data:
+            customer_snapshot_data = data['customer_snapshot']
+            print("Customer snapshot data: ", customer_snapshot_data)
+            if estimate.customer_snapshot:
+                if 'name' in customer_snapshot_data:
+                    estimate.customer_snapshot.name = customer_snapshot_data['name']
+                    print(f"Estimate customer snapshot name updated to: {estimate.customer_snapshot.name}")
+                if 'email' in customer_snapshot_data:
+                    estimate.customer_snapshot.email = customer_snapshot_data['email']
+                if 'phone_number' in customer_snapshot_data:
+                    estimate.customer_snapshot.phone_number = customer_snapshot_data['phone_number']
+                if 'address' in customer_snapshot_data:
+                    estimate.customer_snapshot.address = customer_snapshot_data['address']
+                if 'city' in customer_snapshot_data:
+                    estimate.customer_snapshot.city = customer_snapshot_data['city']
+                if 'state' in customer_snapshot_data:
+                    estimate.customer_snapshot.state = customer_snapshot_data['state']
+                if 'zip_code' in customer_snapshot_data:
+                    estimate.customer_snapshot.zip_code = customer_snapshot_data['zip_code']
+                if 'country' in customer_snapshot_data:
+                    estimate.customer_snapshot.country = customer_snapshot_data['country']
         if 'status' in data:
             # Convert string to enum
             try:
@@ -319,16 +389,15 @@ def update_estimate(estimate_id):
             "total": estimate.total,
             "notes": estimate.notes,
             "customer_id": estimate.customer_id,
-            "customer": {
-                "id": estimate.customer.id,
-                "name": estimate.customer.name,
-                "email": estimate.customer.email,
-                "phone_number": estimate.customer.phone_number,
-                "address": estimate.customer.address,
-                "city": estimate.customer.city,
-                "state": estimate.customer.state,
-                "zip_code": estimate.customer.zip_code,
-                "country": estimate.customer.country,
+            "customer_snapshot": {
+                "name": estimate.customer_snapshot.name,
+                "email": estimate.customer_snapshot.email,
+                "phone_number": estimate.customer_snapshot.phone_number,
+                "address": estimate.customer_snapshot.address,
+                "city": estimate.customer_snapshot.city,
+                "state": estimate.customer_snapshot.state,
+                "zip_code": estimate.customer_snapshot.zip_code,
+                "country": estimate.customer_snapshot.country,
             },
             "status": estimate.status.value,
             "created_at": estimate.created_at,

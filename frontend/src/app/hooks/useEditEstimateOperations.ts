@@ -45,9 +45,8 @@ async function saveEstimateApiCall(estimateId: string, data: EstimateFormData) {
     if (!res.ok) {
         console.error("Error: ", res.status);
         console.error("Error: ", res.statusText);
-        throw new Error("Failed to save estimate");
+        throw new Error(res.statusText);
     }
-    // TODO: Figure out if there is a need to return the estimate (caught inside of onSuccess)
     const responseData = await res.json();
-    return responseData as Estimate;
+    return responseData.estimate as Estimate;
 }

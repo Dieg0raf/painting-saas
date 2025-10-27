@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { FileText, MoreHorizontal, Eye, Edit, Trash2 } from "lucide-react";
 import { EstimateCardProps } from "@/app/types/estimates/componentProps";
+import { getStatusConfig } from "@/lib/estimateStatus";
 
 export function EstimateCard({
   estimate,
@@ -16,7 +17,6 @@ export function EstimateCard({
   onEdit,
   onDelete,
   onDuplicate,
-  getStatusConfig,
   formatDate,
   formatCurrency,
 }: EstimateCardProps) {
@@ -34,7 +34,7 @@ export function EstimateCard({
       }}
       tabIndex={0}
       role="button"
-      aria-label={`View estimate ${estimate.id} for ${estimate.customer.name}`}
+      aria-label={`View estimate ${estimate.id} for ${estimate.customer_snapshot.name}`}
     >
       <CardContent className="p-4">
         <div className="flex justify-between items-start mb-3">
@@ -80,7 +80,9 @@ export function EstimateCard({
         <div className="space-y-2">
           <div>
             <h3 className="font-medium text-gray-900">{estimate.name}</h3>
-            <p className="text-sm text-gray-500">{estimate.customer.name}</p>
+            <p className="text-sm text-gray-500">
+              {estimate.customer_snapshot.name}
+            </p>
           </div>
 
           <div className="flex justify-between items-center">

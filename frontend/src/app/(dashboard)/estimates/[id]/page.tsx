@@ -1,3 +1,4 @@
+import { ViewEstimateClient } from "@/components/Estimates/View/ViewEstimateClient";
 export default async function ViewEstimatePage({
   params,
 }: {
@@ -5,9 +6,5 @@ export default async function ViewEstimatePage({
 }) {
   const { id } = await params;
   console.log(`Viewing estimate ${id}`);
-  return (
-    <div>
-      <h1>View Estimate {id}</h1>
-    </div>
-  );
+  return <ViewEstimateClient id={id} />;
 }

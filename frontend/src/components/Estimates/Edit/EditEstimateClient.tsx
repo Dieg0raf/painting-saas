@@ -4,22 +4,14 @@ import { useQuery } from "@tanstack/react-query";
 import { EditEstimateForm } from "./EditEstimateForm";
 import { LoadingSpinner } from "@/components/ui/loadingspinner";
 import useEditEstimateOperations from "@/app/hooks/useEditEstimateOperations";
+import { useEstimate } from "@/app/hooks/useEstimate";
 
 interface EditEstimateClientProps {
   id: string;
 }
 
 export function EditEstimateClient({ id }: EditEstimateClientProps) {
-  const { data, isLoading, error } = useQuery<Estimate>({
-    queryKey: ["estimate", id],
-    queryFn: () => fetchEstimate(id),
-    staleTime: 5 * 60 * 1000,
-    gcTime: 10 * 60 * 1000,
-    refetchOnWindowFocus: false,
-    refetchOnMount: false,
-    refetchOnReconnect: false,
-  });
-
+  const { estimate, isLoading, error } = useEstimate(id);
   const { saveEstimate, cancelEdit, isSaving } = useEditEstimateOperations(id);
 
   if (isLoading) {
@@ -32,14 +24,13 @@ export function EditEstimateClient({ id }: EditEstimateClientProps) {
 
   return (
     <EditEstimateForm
-      estimate={data as Estimate}
+      estimate={estimate}
       onSave={saveEstimate}
       onCancel={cancelEdit}
       isSaving={isSaving}
     />
   );
 }
-
 export async function fetchEstimate(id: string) {
   console.log("Fetching estimate data for edit page on server with id: ", id);
   const res = await fetch(

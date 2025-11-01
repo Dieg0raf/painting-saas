@@ -1,8 +1,10 @@
-from flask import Blueprint, jsonify, request
+from flask import Blueprint, jsonify, request, render_template, send_file
 from database import db
 from models import User, Estimate, EstimateDescription, EstimateItem, EstimateStatus, Customer, CustomerSnapShot
 from utils import logger, required_roles
 from flask_jwt_extended import jwt_required, get_jwt_identity
+from playwright.sync_api import sync_playwright
+from io import BytesIO
 
 estimates_bp = Blueprint('estimates', __name__, url_prefix='/api/estimates')
 
@@ -452,3 +454,68 @@ def delete_estimate(estimate_id):
         logger.error(f"Error deleting estimate: {str(e)}")
         return jsonify({"error": "Failed to delete estimate"}), 500
     
+@estimates_bp.route('/<int:estimate_id>/pdf', methods=['GET'])
+@jwt_required()
+@required_roles(['admin'])
+def generate_pdf(estimate_id):
+    try:
+        user_id = get_jwt_identity()
+        user = User.query.filter_by(id=user_id).first()
+        
+        if not user:
+            logger.error(f"User not found")
+            return jsonify({"error": "User not found"}), 404
+        
+        # Get the estimate with all relationships loaded
+        estimate = Estimate.query.filter_by(
+            id=estimate_id, 
+            company_id=user.company_id
+        ).first()
+        
+        if not estimate:
+            logger.error(f"Estimate not found")
+            return jsonify({"error": "Estimate not found"}), 404
+        
+        # Render HTML template with estimate data
+        html_content = render_template('estimate_pdf.html', estimate=estimate)
+        
+        # Generate PDF using Playwright with latest API
+        pdf_buffer = None
+        with sync_playwright() as p:
+            browser = p.chromium.launch(
+                headless=True,
+                args=['--no-sandbox', '--disable-setuid-sandbox']  # For server environments
+            )
+            
+            page = browser.new_page()
+            page.set_content(html_content, wait_until='networkidle')
+            
+            # Generate PDF with latest API options
+            pdf_buffer = page.pdf(
+                format='Letter',
+                margin={
+                    'top': '2cm',
+                    'right': '2cm',
+                    'bottom': '2cm',
+                    'left': '2cm'
+                },
+                print_background=True,
+                prefer_css_page_size=False
+            )
+            
+            browser.close()
+        
+        # Create BytesIO object from PDF buffer
+        pdf_io = BytesIO(pdf_buffer)
+        
+        # Return PDF as downloadable file
+        return send_file(
+            pdf_io,
+            mimetype='application/pdf',
+            as_attachment=True,
+            download_name=f'estimate-{estimate_id}.pdf'
+        )
+        
+    except Exception as e:
+        logger.error(f"Error generating PDF: {str(e)}")
+        return jsonify({"error": "Failed to generate PDF"}), 500

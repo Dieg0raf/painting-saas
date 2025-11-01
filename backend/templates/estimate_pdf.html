@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Estimate #{{ estimate.id }} - Rivas Pro Painting</title>
+    <style>
+        @page {
+            margin: 1.5cm 2cm;
+            size: letter;
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Arial', 'Helvetica', sans-serif;
+            font-size: 11px;
+            line-height: 1.4;
+            color: #1a1a1a;
+            background: white;
+        }
+        
+        /* Header */
+        .header {
+            margin-bottom: 20px;
+        }
+        .estimate-title {
+            text-align: center;
+            font-size: 32px;
+            font-weight: 300;
+            letter-spacing: 3px;
+            color: #666;
+            margin-bottom: 25px;
+        }
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 15px;
+        }
+        .company-info {
+            flex: 1;
+        }
+        .company-name {
+            font-size: 22px;
+            font-weight: bold;
+            color: #0066cc;
+            margin-bottom: 8px;
+        }
+        .company-details {
+            font-size: 11px;
+            color: #333;
+            line-height: 1.6;
+        }
+        .company-phone {
+            color: #dc2626;
+            font-weight: bold;
+        }
+        .logo-area {
+            width: 150px;
+            text-align: center;
+            padding: 10px;
+            border: 1px dashed #ccc;
+            font-size: 9px;
+            color: #999;
+        }
+        .estimate-date {
+            font-size: 11px;
+            margin-top: 10px;
+            color: #333;
+        }
+        
+        /* Customer Information */
+        .section-title {
+            text-align: center;
+            font-size: 18px;
+            font-weight: 600;
+            color: #666;
+            margin: 25px 0 15px 0;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .customer-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        .customer-table th {
+            background-color: #4a5568;
+            color: white;
+            padding: 8px 12px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 11px;
+            border: 1px solid #2d3748;
+        }
+        .customer-table td {
+            padding: 8px 12px;
+            border: 1px solid #e2e8f0;
+            background-color: #ffffff;
+            font-size: 11px;
+        }
+        .customer-table td.label {
+            background-color: #f7fafc;
+            font-weight: 600;
+            width: 35%;
+            color: #2d3748;
+        }
+        
+        /* Description Section */
+        .proposal-statement {
+            font-size: 11px;
+            margin-bottom: 10px;
+            color: #333;
+        }
+        .work-type-heading {
+            font-size: 13px;
+            font-weight: 600;
+            margin: 15px 0 8px 0;
+            color: #1a1a1a;
+            text-transform: uppercase;
+        }
+        
+        /* Work Table */
+        .work-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            page-break-inside: avoid;
+        }
+        .work-table th {
+            background-color: #4a5568;
+            color: white;
+            padding: 10px 8px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 10px;
+            border: 1px solid #2d3748;
+            vertical-align: top;
+        }
+        .work-table th:nth-child(1) {
+            width: 20%;
+        }
+        .work-table th:nth-child(2) {
+            width: 50%;
+        }
+        .work-table th:nth-child(3) {
+            width: 30%;
+        }
+        .work-table td {
+            padding: 10px 8px;
+            border: 1px solid #e2e8f0;
+            background-color: #ffffff;
+            font-size: 10px;
+            vertical-align: top;
+        }
+        .work-table td.area {
+            font-weight: 600;
+            background-color: #f7fafc;
+            color: #2d3748;
+        }
+        .work-list {
+            margin: 0;
+            padding-left: 18px;
+        }
+        .work-list li {
+            margin: 4px 0;
+            line-height: 1.5;
+        }
+        
+        /* Notes Section */
+        .notes-section {
+            margin: 20px 0;
+            page-break-inside: avoid;
+        }
+        .notes-title {
+            font-size: 13px;
+            font-weight: bold;
+            margin-bottom: 8px;
+            color: #1a1a1a;
+        }
+        .notes-list {
+            margin: 0;
+            padding-left: 18px;
+        }
+        .notes-list li {
+            margin: 5px 0;
+            line-height: 1.5;
+        }
+        
+        /* Total Section */
+        .total-section {
+            margin: 25px 0;
+            page-break-inside: avoid;
+        }
+        .total-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 20px;
+        }
+        .proposal-text {
+            flex: 1;
+            font-size: 11px;
+            color: #333;
+            padding-right: 20px;
+        }
+        .total-box {
+            width: 200px;
+            border: 2px solid #333;
+            padding: 15px;
+            text-align: center;
+            background-color: #fff;
+        }
+        .total-label {
+            font-weight: bold;
+            font-size: 12px;
+            margin-bottom: 8px;
+            color: #1a1a1a;
+        }
+        .total-amount {
+            font-size: 28px;
+            font-weight: bold;
+            color: #1a1a1a;
+        }
+        
+        /* Guarantee Section */
+        .guarantee-section {
+            margin: 25px 0;
+            page-break-inside: avoid;
+        }
+        .guarantee-title {
+            font-size: 13px;
+            font-weight: bold;
+            margin-bottom: 8px;
+            color: #1a1a1a;
+            text-transform: uppercase;
+        }
+        .guarantee-text {
+            font-size: 10px;
+            line-height: 1.6;
+            color: #333;
+        }
+        
+        /* Signature Section */
+        .signature-section {
+            margin: 30px 0 20px 0;
+            page-break-inside: avoid;
+        }
+        .signature-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+        }
+        .signature-box {
+            width: 48%;
+        }
+        .signature-line {
+            border-bottom: 1px solid #333;
+            margin-bottom: 5px;
+            height: 40px;
+        }
+        .signature-label {
+            border: 1px solid #ddd;
+            padding: 5px;
+            text-align: center;
+            font-size: 10px;
+            background-color: #f9fafb;
+            color: #666;
+        }
+        .acceptance-section {
+            margin: 25px 0;
+        }
+        .acceptance-title {
+            font-size: 13px;
+            font-weight: bold;
+            margin-bottom: 8px;
+            color: #1a1a1a;
+            text-transform: uppercase;
+        }
+        .acceptance-text {
+            font-size: 11px;
+            line-height: 1.6;
+            color: #333;
+            margin-bottom: 15px;
+        }
+        .customer-signature {
+            width: 100%;
+            margin-top: 10px;
+        }
+        
+        /* Footer */
+        .footer {
+            margin-top: 30px;
+            padding-top: 15px;
+            border-top: 1px solid #e2e8f0;
+            font-size: 9px;
+            color: #666;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <div class="estimate-title">ESTIMATE</div>
+        <div class="header-content">
+            <div class="company-info">
+                <div class="company-name">RIVAS PRO PAINTING</div>
+                <div class="company-details">
+                    3639 Mallard Way<br>
+                    Antioch CA. 94509<br>
+                    CL 1025434<br>
+                    <span class="company-phone">(925) 768-3649</span>
+                </div>
+                <div class="estimate-date">
+                    Date: {{ estimate.created_at.strftime('%m/%d/%Y') if estimate.created_at else '' }}
+                </div>
+            </div>
+            <div class="logo-area">
+                [LOGO PLACEHOLDER]<br>
+                <small>Add company logo here</small>
+            </div>
+        </div>
+    </div>
+
+    <!-- Customer Information -->
+    <div class="section-title">Customer Information</div>
+    <table class="customer-table">
+        <tr>
+            <td class="label">Customer Name:</td>
+            <td>{{ estimate.customer_snapshot.name }}</td>
+        </tr>
+        <tr>
+            <td class="label">Customer Address:</td>
+            <td>{{ estimate.customer_snapshot.address }}</td>
+        </tr>
+        <tr>
+            <td class="label">Customer City and State:</td>
+            <td>{{ estimate.customer_snapshot.city }}, {{ estimate.customer_snapshot.state }}</td>
+        </tr>
+    </table>
+
+    <!-- Description -->
+    <div class="proposal-statement">
+        We hereby submit specification and bid for the following:
+    </div>
+    
+    <div class="section-title">Description</div>
+    
+    {% if estimate.description %}
+    <div class="work-type-heading">
+        Estimate for {% if estimate.description.work_types %}{{ estimate.description.work_types[0].upper() }}{% if estimate.description.work_types|length > 1 %} / {{ estimate.description.work_types[1].upper() }}{% endif %}{% else %}INTERIOR{% endif %} Paint Work:
+    </div>
+    
+    {% if estimate.description.items %}
+    <table class="work-table">
+        <thead>
+            <tr>
+                <th>AREA</th>
+                <th>WORK TO BE PERFORMED</th>
+                <th>NOTES/EXTRAS<br>(if applicable)</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in estimate.description.items %}
+            <tr>
+                <td class="area">{{ item.area }}</td>
+                <td>
+                    {% if item.work_details %}
+                    <ul class="work-list">
+                        {% for detail in item.work_details %}
+                        <li>{{ detail }}</li>
+                        {% endfor %}
+                    </ul>
+                    {% else %}
+                    <span style="color: #999;">No work details specified</span>
+                    {% endif %}
+                </td>
+                <td>
+                    {% if item.notes_extras %}
+                    <ul class="work-list">
+                        {% for note in item.notes_extras %}
+                        <li>{{ note }}</li>
+                        {% endfor %}
+                    </ul>
+                    {% else %}
+                    <span style="color: #999;">—</span>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% endif %}
+    {% endif %}
+
+    <!-- Additional Items/Notes -->
+    {% if estimate.description and estimate.description.items %}
+    {% set has_additional_items = estimate.description.items|selectattr('work_details', 'equalto', [])|list %}
+    {% if estimate.notes or (estimate.description.items|selectattr('work_details')|list|length > estimate.description.items|length) %}
+    <div class="notes-section">
+        <div class="notes-title">NOTE:</div>
+        <ul class="notes-list">
+            {% for note in estimate.notes %}
+            <li>{{ note }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
+    {% endif %}
+
+    <!-- Total -->
+    <div class="total-section">
+        <div class="total-container">
+            <div class="proposal-text">
+                We hereby propose to furnish material and labor to complete the work outlined herein for the sum of:
+            </div>
+            <div class="total-box">
+                <div class="total-label">TOTAL:</div>
+                <div class="total-amount">${{ "{:,.2f}".format(estimate.total) }}</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contractor's Guarantee -->
+    <div class="guarantee-section">
+        <div class="guarantee-title">Contractor's Guarantee</div>
+        <div class="guarantee-text">
+            We guarantee all material used in this estimate to be specified above and the entire job be done in a neat, professional manner. Any variations from the plan or alterations requiring extra labor or material will be performed only upon written order and billed in addition to the sum covered by this estimate.
+        </div>
+        <div class="signature-row" style="margin-top: 20px;">
+            <div class="signature-box">
+                <div class="signature-line"></div>
+                <div class="signature-label">Signed (Contractor)</div>
+            </div>
+            <div class="signature-box">
+                <div class="signature-line"></div>
+                <div class="signature-label">Date</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Acceptance of Bid -->
+    <div class="acceptance-section">
+        <div class="acceptance-title">Acceptance of Bid</div>
+        <div class="acceptance-text">
+            The above specifications are satisfactory, and (we) hereby authorize this work.
+        </div>
+        <div class="signature-box customer-signature">
+            <div class="signature-line"></div>
+            <div class="signature-label">Signed (Customer)</div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        <p>This estimate is valid for 30 days from the date issued. Prices and availability are subject to change.</p>
+    </div>
+</body>
+</html>

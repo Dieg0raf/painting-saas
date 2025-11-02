@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Edit, Download } from "lucide-react";
 import { ViewEstimateDetails } from "../View/ViewEstimateDetails";
 import { useEstimateNavigation } from "@/app/hooks/useEstimateNavigation";
+import { useExportPDF } from "@/app/hooks/useExportPFD";
 
 interface ViewEstimateClientProps {
   id: string;
@@ -14,6 +15,7 @@ interface ViewEstimateClientProps {
 export function ViewEstimateClient({ id }: ViewEstimateClientProps) {
   const { estimate, isLoading, error } = useEstimate(id);
   const { editEstimate } = useEstimateNavigation();
+  const { mutate: exportPDF, isPending: isExportingPDF } = useExportPDF();
   const router = useRouter();
 
   if (isLoading) {
@@ -46,12 +48,6 @@ export function ViewEstimateClient({ id }: ViewEstimateClientProps) {
     );
   }
 
-  const handleExportPDF = () => {
-    // TODO: Implement PDF export
-    console.log("Exporting PDF for estimate:", id);
-    // This will be implemented later
-  };
-
   return (
     <div className="max-w-5xl mx-auto p-4 sm:p-6 space-y-6 sm:space-y-8">
       {/* Header with actions */}
@@ -65,12 +61,13 @@ export function ViewEstimateClient({ id }: ViewEstimateClientProps) {
         <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 w-full sm:w-auto">
           <Button
             variant="outline"
-            onClick={handleExportPDF}
+            onClick={() => exportPDF(id)}
             className="w-full sm:w-auto sm:min-w-[140px]"
+            disabled={isExportingPDF}
             aria-label="Export estimate as PDF"
           >
             <Download className="w-4 h-4 mr-2" />
-            Export PDF
+            {isExportingPDF ? "Exporting..." : "Export PDF"}
           </Button>
           <Button
             onClick={() => editEstimate(estimate.id)}

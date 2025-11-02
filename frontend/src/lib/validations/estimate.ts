@@ -27,8 +27,12 @@ export const CustomerSnapshotSchema = z.object({
 export const EstimateItemSchema = z.object({
     id: z.number().optional(),
     area: z.string().min(1, "Area is required").max(100, "Area must be less than 100 characters"),
-    work_details: z.array(z.string()),
-    notes_extras: z.array(z.string())
+    work_details: z.array(z.string()).transform((arr) =>
+        arr.filter((detail) => detail.trim() !== "")
+    ),
+    notes_extras: z.array(z.string()).transform((arr) =>
+        arr.filter((note) => note.trim() !== "")
+    ),
 });
 
 // Estimate Description Schema
@@ -60,7 +64,9 @@ export const EditEstimateFormSchema = z.object({
     name: z.string().min(1, "Estimate name is required").max(80, "Name must be less than 80 characters"),
     total: z.number().min(0, "Total must be positive"),
     status: EstimateStatus,
-    notes: z.array(z.string()),
+    notes: z.array(z.string()).transform((arr) =>
+        arr.filter((note) => note.trim() !== "")
+    ),
     customer_snapshot: CustomerSnapshotSchema,
     description: EstimateDescriptionSchema
 });

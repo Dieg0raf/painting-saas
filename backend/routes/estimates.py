@@ -5,6 +5,8 @@ from utils import logger, required_roles
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from playwright.sync_api import sync_playwright
 from io import BytesIO
+from pydantic import ValidationError
+from schemas import EstimateResponse, EstimateListResponse, EstimateSingleResponse, ErrorResponse
 
 estimates_bp = Blueprint('estimates', __name__, url_prefix='/api/estimates')
 
@@ -18,77 +20,21 @@ def get_estimates():
 
         if not user:
             logger.error(f"User not found")
-            return jsonify({"error": "User not found"}), 404
-        
-        # query = Estimate.query.filter_by(company_id=user.company_id)
-        
-        # Phase 1 (Essential):
-# ✅ Backend pagination (page, limit)
-        # Basic search (estimate name, customer name)
-        # Status filtering
-        # Frontend pagination controls
-
-        # Phase 2 (Nice to have):
-# 🔄 Customer filtering
-        # Date range filtering
-        # Sorting options
-
-        # Phase 3 (Advanced):
-        # Infinite scroll option
-        # Advanced search
-        # Export functionality
-
-        # TODO: handle pagination 
-        # TODO: add pydantic models for the response
-
+            return jsonify(ErrorResponse(error="User not found").model_dump()), 404
 
         estimates = Estimate.query.filter_by(company_id=user.company_id).join(CustomerSnapShot).all()
         if not estimates:
             logger.error(f"No estimates found")
-            return jsonify({"estimates": []}), 200
+            return jsonify(EstimateListResponse(estimates=[]).model_dump()), 200
 
-        estimates_list = []
-        for estimate in estimates:
-            estimates_list.append(
-                {
-                    "id": estimate.id,
-                    "name": estimate.name,
-                    "total": estimate.total,
-                    "notes": estimate.notes,
-                    "customer_id": estimate.customer_id,
-                    "customer_snapshot": {
-                        "name": estimate.customer_snapshot.name,
-                        "email": estimate.customer_snapshot.email,
-                        "phone_number": estimate.customer_snapshot.phone_number,
-                        "address": estimate.customer_snapshot.address,
-                        "city": estimate.customer_snapshot.city,
-                        "state": estimate.customer_snapshot.state,
-                        "zip_code": estimate.customer_snapshot.zip_code,
-                        "country": estimate.customer_snapshot.country,
-                    },
-                    "status": estimate.status.value,
-                    "created_at": estimate.created_at,
-                    "updated_at": estimate.updated_at,
-                    "description": {
-                        "id": estimate.description.id,
-                        "title": estimate.description.title,
-                        "work_types": estimate.description.work_types,
-                        "items": [{
-                            "id": item.id,
-                            "area": item.area,
-                            "work_details": item.work_details,
-                            "notes_extras": item.notes_extras,
-                            "created_at": item.created_at,
-                            "updated_at": item.updated_at,
-                        } for item in estimate.description.items],
-                    }
-                }
-            )
-
-        return jsonify({"estimates": estimates_list}), 200
+        validated_estimates = [EstimateResponse.model_validate(estimate) for estimate in estimates]
+        return jsonify(EstimateListResponse(estimates=validated_estimates).model_dump()), 200
+    except ValidationError as e:
+        logger.error(f"Validation error: {str(e)}")
+        return jsonify(ErrorResponse(error="Invalid estimate data").model_dump()), 400
     except Exception as e:
         logger.error(f"Error getting estimates: {str(e)}")
-        return jsonify({"error": "Failed to get estimates"}), 500
+        return jsonify(ErrorResponse(error="Failed to get estimates").model_dump()), 500
     
 @estimates_bp.route('/<int:estimate_id>', methods=['GET'])
 @jwt_required()
@@ -99,50 +45,21 @@ def get_estimate(estimate_id):
         user = User.query.filter_by(id=user_id).first()
         if not user:
             logger.error(f"User not found")
-            return jsonify({"error": "User not found"}), 404
+            return jsonify(ErrorResponse(error="User not found").model_dump()), 404
         
         estimate = Estimate.query.filter_by(id=estimate_id, company_id=user.company_id).first()
         if not estimate:
             logger.error(f"Estimate not found")
-            return jsonify({"error": "Estimate not found"}), 404
+            return jsonify(ErrorResponse(error="Estimate not found").model_dump()), 404
 
-        estimate_response = {
-                    "id": estimate.id,
-                    "name": estimate.name,
-                    "total": estimate.total,
-                    "notes": estimate.notes,
-                    "customer_id": estimate.customer_id,
-                    "customer_snapshot": {
-                        "name": estimate.customer_snapshot.name,
-                        "email": estimate.customer_snapshot.email,
-                        "phone_number": estimate.customer_snapshot.phone_number,
-                        "address": estimate.customer_snapshot.address,
-                        "city": estimate.customer_snapshot.city,
-                        "state": estimate.customer_snapshot.state,
-                        "zip_code": estimate.customer_snapshot.zip_code,
-                        "country": estimate.customer_snapshot.country,
-                    },
-                    "status": estimate.status.value,
-                    "created_at": estimate.created_at,
-                    "updated_at": estimate.updated_at,
-                    "description": {
-                        "id": estimate.description.id,
-                        "title": estimate.description.title,
-                        "work_types": estimate.description.work_types,
-                        "items": [{
-                            "id": item.id,
-                            "area": item.area,
-                            "work_details": item.work_details,
-                            "notes_extras": item.notes_extras,
-                            "created_at": item.created_at,
-                            "updated_at": item.updated_at,
-                        } for item in estimate.description.items],
-                    }
-                }
-        return jsonify({"estimate": estimate_response}), 200
+        validated_estimate = EstimateResponse.model_validate(estimate)
+        return jsonify(EstimateSingleResponse(estimate=validated_estimate).model_dump()), 200
+    except ValidationError as e:
+        logger.error(f"Validation error: {str(e)}")
+        return jsonify(ErrorResponse(error="Invalid estimate data").model_dump()), 400
     except Exception as e:
         logger.error(f"Error getting estimate: {str(e)}")
-        return jsonify({"error": "Failed to get estimate"}), 500
+        return jsonify(ErrorResponse(error="Failed to get estimate").model_dump()), 500
 
 @estimates_bp.route('', methods=['POST'])
 @jwt_required()

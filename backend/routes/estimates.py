@@ -475,11 +475,6 @@ def generate_pdf(estimate_id):
             logger.error(f"Estimate not found")
             return jsonify({"error": "Estimate not found"}), 404
         
-        print("Estimate: ", estimate)
-        print("Estimate notes: ", estimate.notes)
-        # print("Estimate notes: ", estimate.description.items[1].notes_extras)
-
-        
         # Render HTML template with estimate data
         html_content = render_template('estimate_pdf.html', estimate=estimate)
         

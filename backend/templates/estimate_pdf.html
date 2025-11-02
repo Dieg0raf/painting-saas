@@ -46,7 +46,7 @@
         .company-name {
             font-size: 22px;
             font-weight: bold;
-            color: #0066cc;
+            color: #1e3a8a;
             margin-bottom: 8px;
         }
         .company-details {
@@ -343,6 +343,7 @@
                 </div>
             </div>
             <div class="logo-area">
+                <!-- TODO: Add company logo here -->
                 <img src="https://cdn.pixabay.com/photo/2022/04/07/04/48/calligraphy-7116788_960_720.png" alt="Company Logo" style="max-width: 130px; max-height: 45px; margin-bottom: 8px;"><br>
                 <div class="estimate-info">
                     <div class="estimate-info-item">
@@ -374,7 +375,14 @@
     </table>
 
     <!-- Description -->
-    {% if estimate.description and estimate.description.items and estimate.description.items|length > 0 %}
+    {% if estimate.description and estimate.description.items %}
+    {% set has_valid_items = [] %}
+    {% for item in estimate.description.items %}
+        {% if item.work_details and item.work_details|length > 0 %}
+            {% if has_valid_items.append(1) %}{% endif %}
+        {% endif %}
+    {% endfor %}
+    {% if has_valid_items|length > 0 %}
     <div class="proposal-statement">
         We hereby submit specification and bid for the following:
     </div>
@@ -395,18 +403,15 @@
         </thead>
         <tbody>
             {% for item in estimate.description.items %}
+            {% if item.work_details and item.work_details|length > 0 %}
             <tr>
                 <td class="area">{{ item.area }}</td>
                 <td>
-                    {% if item.work_details %}
                     <ul class="work-list">
                         {% for detail in item.work_details %}
                         <li>{{ detail }}</li>
                         {% endfor %}
                     </ul>
-                    {% else %}
-                    <span style="color: #999;">No work details specified</span>
-                    {% endif %}
                 </td>
                 <td>
                     {% if item.notes_extras and item.notes_extras|length > 0 %}
@@ -418,9 +423,11 @@
                     {% endif %}
                 </td>
             </tr>
+            {% endif %}
             {% endfor %}
         </tbody>
     </table>
+    {% endif %}
     {% endif %}
 
     <!-- Additional Items/Notes -->

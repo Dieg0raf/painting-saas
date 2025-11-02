@@ -27,7 +27,9 @@ export const CustomerSnapshotSchema = z.object({
 export const EstimateItemSchema = z.object({
     id: z.number().optional(),
     area: z.string().min(1, "Area is required").max(100, "Area must be less than 100 characters"),
-    work_details: z.array(z.string()),
+    work_details: z.array(z.string()).transform((arr) =>
+        arr.filter((detail) => detail.trim() !== "")
+    ),
     notes_extras: z.array(z.string()).transform((arr) =>
         arr.filter((note) => note.trim() !== "")
     )

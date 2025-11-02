@@ -6,7 +6,7 @@
     <title>Estimate #{{ estimate.id }} - Rivas Pro Painting</title>
     <style>
         @page {
-            margin: 1.5cm 2cm;
+            margin: 1.2cm 1.8cm;
             size: letter;
         }
         * {
@@ -24,7 +24,7 @@
         
         /* Header */
         .header {
-            margin-bottom: 20px;
+            margin-bottom: 18px;
         }
         .estimate-title {
             text-align: center;
@@ -32,13 +32,13 @@
             font-weight: 300;
             letter-spacing: 3px;
             color: #666;
-            margin-bottom: 25px;
+            margin-bottom: 20px;
         }
         .header-content {
             display: flex;
             justify-content: space-between;
             align-items: flex-start;
-            margin-bottom: 15px;
+            margin-bottom: 12px;
         }
         .company-info {
             flex: 1;
@@ -62,7 +62,6 @@
             width: 150px;
             text-align: center;
             padding: 10px;
-            border: 1px dashed #ccc;
             font-size: 9px;
             color: #999;
         }
@@ -71,6 +70,19 @@
             margin-top: 10px;
             color: #333;
         }
+        .estimate-info {
+            margin-top: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        .estimate-info-item {
+            font-size: 11px;
+            color: #333;
+        }
+        .estimate-info-label {
+            font-weight: bold;
+        }
         
         /* Customer Information */
         .section-title {
@@ -78,26 +90,26 @@
             font-size: 18px;
             font-weight: 600;
             color: #666;
-            margin: 25px 0 15px 0;
+            margin: 20px 0 12px 0;
             text-transform: uppercase;
             letter-spacing: 1px;
         }
         .customer-table {
             width: 100%;
             border-collapse: collapse;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
         }
         .customer-table th {
             background-color: #4a5568;
             color: white;
-            padding: 8px 12px;
+            padding: 7px 10px;
             text-align: left;
             font-weight: 600;
             font-size: 11px;
             border: 1px solid #2d3748;
         }
         .customer-table td {
-            padding: 8px 12px;
+            padding: 7px 10px;
             border: 1px solid #e2e8f0;
             background-color: #ffffff;
             font-size: 11px;
@@ -112,28 +124,33 @@
         /* Description Section */
         .proposal-statement {
             font-size: 11px;
-            margin-bottom: 10px;
+            margin-bottom: 12px;
             color: #333;
+            text-align: center;
+            font-style: italic;
         }
         .work-type-heading {
             font-size: 13px;
             font-weight: 600;
-            margin: 15px 0 8px 0;
+            margin: 15px 0 10px 0;
             color: #1a1a1a;
             text-transform: uppercase;
+            text-align: center;
+            letter-spacing: 0.5px;
         }
         
         /* Work Table */
         .work-table {
             width: 100%;
             border-collapse: collapse;
-            margin: 15px 0;
+            margin: 12px 0;
             page-break-inside: avoid;
+            border: 1px solid #e2e8f0;
         }
         .work-table th {
             background-color: #4a5568;
             color: white;
-            padding: 10px 8px;
+            padding: 8px 6px;
             text-align: left;
             font-weight: 600;
             font-size: 10px;
@@ -150,7 +167,7 @@
             width: 30%;
         }
         .work-table td {
-            padding: 10px 8px;
+            padding: 8px 6px;
             border: 1px solid #e2e8f0;
             background-color: #ffffff;
             font-size: 10px;
@@ -166,20 +183,25 @@
             padding-left: 18px;
         }
         .work-list li {
-            margin: 4px 0;
-            line-height: 1.5;
+            margin: 3px 0;
+            line-height: 1.4;
         }
         
         /* Notes Section */
         .notes-section {
-            margin: 20px 0;
+            margin: 18px 0;
             page-break-inside: avoid;
+            padding: 10px;
+            background-color: #f9fafb;
+            border-left: 3px solid #4a5568;
         }
         .notes-title {
             font-size: 13px;
             font-weight: bold;
             margin-bottom: 8px;
             color: #1a1a1a;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
         .notes-list {
             margin: 0;
@@ -188,27 +210,31 @@
         .notes-list li {
             margin: 5px 0;
             line-height: 1.5;
+            color: #333;
         }
         
         /* Total Section */
         .total-section {
-            margin: 25px 0;
+            margin: 20px 0;
             page-break-inside: avoid;
+            page-break-after: avoid;
         }
         .total-container {
             display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 20px;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 15px;
         }
         .proposal-text {
-            flex: 1;
             font-size: 11px;
             color: #333;
-            padding-right: 20px;
+            margin-bottom: 15px;
+            text-align: center;
+            line-height: 1.6;
+            max-width: 600px;
         }
         .total-box {
-            width: 200px;
+            width: 220px;
             border: 2px solid #333;
             padding: 15px;
             text-align: center;
@@ -221,14 +247,14 @@
             color: #1a1a1a;
         }
         .total-amount {
-            font-size: 28px;
+            font-size: 24px;
             font-weight: bold;
             color: #1a1a1a;
         }
         
         /* Guarantee Section */
         .guarantee-section {
-            margin: 25px 0;
+            margin: 20px 0;
             page-break-inside: avoid;
         }
         .guarantee-title {
@@ -240,13 +266,13 @@
         }
         .guarantee-text {
             font-size: 10px;
-            line-height: 1.6;
+            line-height: 1.5;
             color: #333;
         }
         
         /* Signature Section */
         .signature-section {
-            margin: 30px 0 20px 0;
+            margin: 25px 0 15px 0;
             page-break-inside: avoid;
         }
         .signature-row {
@@ -260,7 +286,7 @@
         .signature-line {
             border-bottom: 1px solid #333;
             margin-bottom: 5px;
-            height: 40px;
+            height: 35px;
         }
         .signature-label {
             border: 1px solid #ddd;
@@ -271,7 +297,7 @@
             color: #666;
         }
         .acceptance-section {
-            margin: 25px 0;
+            margin: 20px 0;
         }
         .acceptance-title {
             font-size: 13px;
@@ -282,9 +308,9 @@
         }
         .acceptance-text {
             font-size: 11px;
-            line-height: 1.6;
+            line-height: 1.5;
             color: #333;
-            margin-bottom: 15px;
+            margin-bottom: 12px;
         }
         .customer-signature {
             width: 100%;
@@ -293,8 +319,8 @@
         
         /* Footer */
         .footer {
-            margin-top: 30px;
-            padding-top: 15px;
+            margin-top: 25px;
+            padding-top: 12px;
             border-top: 1px solid #e2e8f0;
             font-size: 9px;
             color: #666;
@@ -315,13 +341,17 @@
                     CL 1025434<br>
                     <span class="company-phone">(925) 768-3649</span>
                 </div>
-                <div class="estimate-date">
-                    Date: {{ estimate.created_at.strftime('%m/%d/%Y') if estimate.created_at else '' }}
-                </div>
             </div>
             <div class="logo-area">
-                [LOGO PLACEHOLDER]<br>
-                <small>Add company logo here</small>
+                <img src="https://cdn.pixabay.com/photo/2022/04/07/04/48/calligraphy-7116788_960_720.png" alt="Company Logo" style="max-width: 130px; max-height: 45px; margin-bottom: 8px;"><br>
+                <div class="estimate-info">
+                    <div class="estimate-info-item">
+                        <span class="estimate-info-label">Estimate #:</span> {{ estimate.id }}
+                    </div>
+                    <div class="estimate-info-item">
+                        <span class="estimate-info-label">Estimate Date:</span> {{ estimate.created_at.strftime('%m/%d/%Y') if estimate.created_at else '' }}
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -344,18 +374,17 @@
     </table>
 
     <!-- Description -->
+    {% if estimate.description and estimate.description.items and estimate.description.items|length > 0 %}
     <div class="proposal-statement">
         We hereby submit specification and bid for the following:
     </div>
     
     <div class="section-title">Description</div>
     
-    {% if estimate.description %}
     <div class="work-type-heading">
         Estimate for {% if estimate.description.work_types %}{{ estimate.description.work_types[0].upper() }}{% if estimate.description.work_types|length > 1 %} / {{ estimate.description.work_types[1].upper() }}{% endif %}{% else %}INTERIOR{% endif %} Paint Work:
     </div>
     
-    {% if estimate.description.items %}
     <table class="work-table">
         <thead>
             <tr>
@@ -380,14 +409,12 @@
                     {% endif %}
                 </td>
                 <td>
-                    {% if item.notes_extras %}
+                    {% if item.notes_extras and item.notes_extras|length > 0 %}
                     <ul class="work-list">
                         {% for note in item.notes_extras %}
                         <li>{{ note }}</li>
                         {% endfor %}
                     </ul>
-                    {% else %}
-                    <span style="color: #999;">—</span>
                     {% endif %}
                 </td>
             </tr>
@@ -395,12 +422,9 @@
         </tbody>
     </table>
     {% endif %}
-    {% endif %}
 
     <!-- Additional Items/Notes -->
-    {% if estimate.description and estimate.description.items %}
-    {% set has_additional_items = estimate.description.items|selectattr('work_details', 'equalto', [])|list %}
-    {% if estimate.notes or (estimate.description.items|selectattr('work_details')|list|length > estimate.description.items|length) %}
+    {% if estimate.notes and estimate.notes|length > 0 %}
     <div class="notes-section">
         <div class="notes-title">NOTE:</div>
         <ul class="notes-list">
@@ -409,7 +433,6 @@
             {% endfor %}
         </ul>
     </div>
-    {% endif %}
     {% endif %}
 
     <!-- Total -->

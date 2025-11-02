@@ -310,7 +310,6 @@ def update_estimate(estimate_id):
         estimate = Estimate.query.filter_by(id=estimate_id, company_id=user.company_id).first()
         if not estimate:
             logger.error(f"Estimate not found")
-            return jsonify({"error": "Estimate not found"}), 404
         
         # Update basic estimate fields
         if 'name' in data:
@@ -475,6 +474,11 @@ def generate_pdf(estimate_id):
         if not estimate:
             logger.error(f"Estimate not found")
             return jsonify({"error": "Estimate not found"}), 404
+        
+        print("Estimate: ", estimate)
+        print("Estimate notes: ", estimate.notes)
+        # print("Estimate notes: ", estimate.description.items[1].notes_extras)
+
         
         # Render HTML template with estimate data
         html_content = render_template('estimate_pdf.html', estimate=estimate)

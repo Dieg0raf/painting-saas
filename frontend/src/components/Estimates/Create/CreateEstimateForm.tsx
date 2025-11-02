@@ -3,7 +3,7 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
-import { Save, X, FileText } from "lucide-react";
+import { Save, X } from "lucide-react";
 import {
   EditEstimateFormSchema,
   EstimateFormData,
@@ -18,7 +18,6 @@ import { FieldSet, FieldGroup } from "@/components/ui/field";
 interface CreateEstimateFormProps {
   onSave: (data: EstimateFormData) => void;
   onCancel: () => void;
-  onGeneratePDF: () => void;
   isSaving: boolean;
   selectedCustomer?: Customer;
 }
@@ -26,7 +25,6 @@ interface CreateEstimateFormProps {
 export function CreateEstimateForm({
   onSave,
   onCancel,
-  onGeneratePDF,
   isSaving,
   selectedCustomer,
 }: CreateEstimateFormProps) {
@@ -90,17 +88,6 @@ export function CreateEstimateForm({
             >
               <X className="w-4 h-4 mr-2" />
               Cancel
-            </Button>
-          )}
-          {onGeneratePDF && (
-            <Button
-              variant="outline"
-              onClick={onGeneratePDF}
-              className="w-full sm:w-auto sm:min-w-[120px] order-2 sm:order-2"
-              aria-label="Generate PDF preview"
-            >
-              <FileText className="w-4 h-4 mr-2" />
-              Preview PDF
             </Button>
           )}
           <Button

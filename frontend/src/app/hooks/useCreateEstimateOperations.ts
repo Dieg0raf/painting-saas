@@ -30,16 +30,12 @@ export default function useCreateEstimateOperations() {
         toast.info('Cancelling estimate creation');
     };
 
-    const generatePDF = () => {
-        toast.info('PDF generation not implemented yet');
-    };
 
     return {
         isCreating,
         isCreateSuccess,
         createEstimate,
         cancelCreate,
-        generatePDF,
     };
 }
 

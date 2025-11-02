@@ -11,7 +11,7 @@ export default function CreateEstimateClient() {
     Customer | undefined
   >();
 
-  const { createEstimate, cancelCreate, generatePDF, isCreating } =
+  const { createEstimate, cancelCreate, isCreating } =
     useCreateEstimateOperations();
 
   const handleSave = (data: EstimateFormData) => {
@@ -22,15 +22,10 @@ export default function CreateEstimateClient() {
     cancelCreate();
   };
 
-  const handleGeneratePDF = () => {
-    generatePDF();
-  };
-
   return (
     <CreateEstimateForm
       onSave={handleSave}
       onCancel={handleCancel}
-      onGeneratePDF={handleGeneratePDF}
       isSaving={isCreating}
       selectedCustomer={selectedCustomer}
     />

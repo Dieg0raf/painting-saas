@@ -16,7 +16,6 @@ export function EstimateNotes({ form }: EstimateNotesProps) {
   const notes = form.watch("notes") || [];
   const addNote = () => {
     const currentNotes = form.getValues("notes") || [];
-    console.log("Adding note: ", currentNotes);
     form.setValue("notes", [...currentNotes, ""]);
   };
   const removeNote = (index: number) => {

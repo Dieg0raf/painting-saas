@@ -18,11 +18,6 @@ export function ViewEstimateClient({ id }: ViewEstimateClientProps) {
   const { mutate: exportPDF, isPending: isExportingPDF } = useExportPDF();
   const router = useRouter();
 
-  console.log("Estimate: ", estimate);
-  console.log(
-    "Estimate notes: ",
-    estimate?.description?.items[1]?.notes_extras
-  );
   if (isLoading) {
     return (
       <div className="flex items-center justify-center py-12">

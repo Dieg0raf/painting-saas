@@ -32,7 +32,7 @@ export const EstimateItemSchema = z.object({
     ),
     notes_extras: z.array(z.string()).transform((arr) =>
         arr.filter((note) => note.trim() !== "")
-    )
+    ),
 });
 
 // Estimate Description Schema
